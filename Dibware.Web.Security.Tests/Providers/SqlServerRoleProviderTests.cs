@@ -27,8 +27,17 @@ namespace Dibware.Web.Security.Tests.Providers
 
             // Mock role repository
             _roleProviderRepository = new Mock<ISqlServerRoleProviderRepository>();
+
             _roleProviderRepository
-                .Setup(s => s.GetRolesForUser(It.IsAny<String>()))
+                .Setup(r => r.FindUsersInRole(RoleData.RoleName1, UserData.UserName1))
+                .Returns(new[] { UserData.UserName1 });
+
+            _roleProviderRepository
+                .Setup(r => r.GetAllRoles())
+                .Returns(_allRoles);
+
+            _roleProviderRepository
+                .Setup(r => r.GetRolesForUser(It.IsAny<String>()))
                 .Returns(_allRoles);
         }
 
@@ -57,10 +66,12 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const String expectedApplicationName = RoleProviderData.ApplicationName;
-            var provider = new SqlServerRoleProvider();
+            var provider = new SqlServerRoleProvider
+            {
+                ApplicationName = expectedApplicationName
+            };
 
             // Act
-            provider.ApplicationName = expectedApplicationName;
             var actualApplicationName = provider.ApplicationName;
 
             // Assert
@@ -97,11 +108,14 @@ namespace Dibware.Web.Security.Tests.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void FindUsersInRole_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_FindUsersInRolewithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider();
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = null
+            };
 
             // Act
             provider.FindUsersInRole(RoleData.RoleName1, UserData.UserName1);
@@ -111,17 +125,76 @@ namespace Dibware.Web.Security.Tests.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_GetAllRoles_ThrowsNotImplementedException()
+        public void Test_FindUsersInRole_FindsUserForValidUser()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider();
+            const Int32 expectedUserCount = 1;
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
+
+            // Act
+            var users = provider.FindUsersInRole(RoleData.RoleName1, UserData.UserName1);
+
+            // Assert
+            Assert.AreEqual(expectedUserCount, users.Length);
+            CollectionAssert.Contains(users, UserData.UserName1);
+        }
+
+        [TestMethod]
+        public void Test_FindUsersInRole_DoesNotFinduserForInvalidUser()
+        {
+            // Arrange
+            const Int32 expectedUserCount = 1;
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
+
+            // Act
+            var users = provider.FindUsersInRole(RoleData.RoleName1, UserData.UserName1);
+
+            // Assert
+            Assert.AreEqual(expectedUserCount, users.Length);
+            CollectionAssert.DoesNotContain(users, UserData.UserName2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_GetAllRolesWithNullRepository_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = null
+            };
 
             // Act
             provider.GetAllRoles();
 
             // Assert
             // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_GetAllRoles_ReturnsTheCorrectCountOfRoles()
+        {
+            // Arrange
+            const Int32 expectedRoleCount = RoleData.ExpectedRoleCount;
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
+
+            // Act
+            var roles = provider.GetAllRoles();
+
+            // Assert
+            Assert.AreEqual(expectedRoleCount, roles.Length);
+            CollectionAssert.Contains(roles, RoleData.RoleName1);
+            CollectionAssert.Contains(roles, RoleData.RoleName2);
+            CollectionAssert.Contains(roles, RoleData.RoleName3);
         }
 
         [TestMethod]
@@ -144,10 +217,12 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const Int32 expectedRoleCount = RoleData.ExpectedRoleCount;
-            var provider = new SqlServerRoleProvider();
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
 
             // Act
-            provider.RoleProviderRepository = _roleProviderRepository.Object;
             var roles = provider.GetRolesForUser(UserData.UserName1);
 
             // Assert

@@ -8,8 +8,6 @@ namespace Dibware.Web.Security.Providers
 {
     public class SqlServerRoleProvider : RoleProvider
     {
-
-
         #region Properties
 
         /// <summary>
@@ -46,16 +44,54 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets an array of user names in a role where the user name contains the specified user name to match.
+        /// </summary>
+        /// <param name="roleName">The role to search in.</param>
+        /// <param name="usernameToMatch">The user name to search for.</param>
+        /// <returns>
+        /// A string array containing the names of all the users where the user name matches <paramref name="usernameToMatch" /> and the user is a member of the specified role.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (RoleProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.RoleProviderRepositoryIsNull);
+            }
+
+            // Use the repository to return roles
+            return RoleProviderRepository.FindUsersInRole(roleName, usernameToMatch);
         }
 
+        /// <summary>
+        /// Gets a list of all the roles for the configured applicationName.
+        /// </summary>
+        /// <returns>
+        /// A string array containing the names of all the roles stored in the data source for the configured applicationName.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         public override string[] GetAllRoles()
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (RoleProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.RoleProviderRepositoryIsNull);
+            }
+
+            // Use the repository to return roles
+            return RoleProviderRepository.GetAllRoles();
         }
 
+        /// <summary>
+        /// Gets a list of the roles that a specified user is in for the configured applicationName.
+        /// </summary>
+        /// <param name="username">The user to return a list of roles for.</param>
+        /// <returns>
+        /// A string array containing the names of all the roles that the specified user is in for the configured applicationName.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public override string[] GetRolesForUser(string username)
         {
             // Validate arguments
