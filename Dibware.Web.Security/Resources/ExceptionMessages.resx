@@ -120,6 +120,9 @@
   <data name="IdentityMustNotBeNull" xml:space="preserve">
     <value>Identity must not be null</value>
   </data>
+  <data name="RoleProviderRepositoryIsNull" xml:space="preserve">
+    <value>Role Provider repository is null</value>
+  </data>
   <data name="RolesMustNotBeEmpty" xml:space="preserve">
     <value>Roles must not be empty</value>
   </data>

@@ -70,6 +70,15 @@ namespace Dibware.Web.Security.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Role Provider repository is null.
+        /// </summary>
+        internal static string RoleProviderRepositoryIsNull {
+            get {
+                return ResourceManager.GetString("RoleProviderRepositoryIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roles must not be empty.
         /// </summary>
         internal static string RolesMustNotBeEmpty {
