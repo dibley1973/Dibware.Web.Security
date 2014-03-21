@@ -36,7 +36,7 @@ Suggested to use Resharper and follow suggestions where appropriate
 * Remove unused references where known
 * Remove unused "usings" from classes and modules
 
-## Regions
+### Regions
 * Use region directives to split up logical blocks of code Constructors, Properties, Methods, interface implentations, etc.
 
 ### Text Strings
