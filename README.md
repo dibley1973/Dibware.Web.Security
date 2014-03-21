@@ -47,4 +47,4 @@ Suggested to use Resharper and follow suggestions where appropriate
 * Each TEST project must have the same name as the project it is to test but with ".Tests" suffix to the name
 * All code must have an accompanying test where possible
 * File locations of tests must emulate the location of the class being tested
-* Test methods must be in the format of "Test_[ActionBeingTested]_[Conditions]_[Result]" where possible
+* Test methods must be in the format of "Test_ActionBeingTested_Conditions_ExpectedResult" where possible
