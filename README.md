@@ -1,7 +1,7 @@
 Dibware.Web.Security
 ====================
 
-A #.Net assembly for use with ASP.Net MVC websites
+A C# .Net 4.5 assembly for use with ASP.Net MVC websites
 
 ## Git Commits
 * Name your commits in the following format YYYYMMDD-HHMM-IINN COMMENT
