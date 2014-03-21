@@ -4,6 +4,7 @@ using Dibware.Web.Security.Tests.TestData;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 
 namespace Dibware.Web.Security.Tests.Providers
 {
@@ -12,7 +13,8 @@ namespace Dibware.Web.Security.Tests.Providers
     {
         #region Declarations
 
-        private string[] _allRoles;
+        private List<String> _allRolesList;
+        //private string[] _allRoles;
         private Mock<ISqlServerRoleProviderRepository> _roleProviderRepository;
 
         #endregion
@@ -23,7 +25,8 @@ namespace Dibware.Web.Security.Tests.Providers
         public void TestInit()
         {
             // Mock all roles array
-            _allRoles = new[] { RoleData.RoleName1, RoleData.RoleName2, RoleData.RoleName3 };
+            _allRolesList = new List<String>() { RoleData.RoleName1, RoleData.RoleName2, RoleData.RoleName3 };
+            //_allRoles = new[] { RoleData.RoleName1, RoleData.RoleName2, RoleData.RoleName3 };
 
             // Mock role repository
             _roleProviderRepository = new Mock<ISqlServerRoleProviderRepository>();
@@ -34,16 +37,30 @@ namespace Dibware.Web.Security.Tests.Providers
 
             _roleProviderRepository
                 .Setup(r => r.GetAllRoles())
-                .Returns(_allRoles);
+                .Returns(_allRolesList.ToArray);
 
             _roleProviderRepository
                 .Setup(r => r.GetRolesForUser(It.IsAny<String>()))
-                .Returns(_allRoles);
+                .Returns(_allRolesList.ToArray);
+
+            _roleProviderRepository
+                .Setup(r => r.RoleExists(RoleData.RoleName1))
+                .Returns(true);
+
+            _roleProviderRepository
+                .Setup(r => r.RoleExists(RoleData.RoleName2))
+                .Returns(true);
+
+            _roleProviderRepository
+                .Setup(r => r.RoleExists(roleName))
+                .Returns(_allRolesList.Contains(roleName));
         }
 
         #endregion
 
         #region Tests
+
+        #region AddUsersToRoles
 
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
@@ -60,6 +77,10 @@ namespace Dibware.Web.Security.Tests.Providers
             // Assert
             // Exception should be thrown
         }
+
+        #endregion
+
+        #region ApplicationName
 
         [TestMethod]
         public void Test_ApplicationName_SetValue_ReturnsSameValueForGet()
@@ -78,6 +99,10 @@ namespace Dibware.Web.Security.Tests.Providers
             Assert.AreEqual(expectedApplicationName, actualApplicationName);
         }
 
+        #endregion
+
+        #region CreateRole
+
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void Test_CreateRole_ThrowsNotImplementedException()
@@ -92,13 +117,20 @@ namespace Dibware.Web.Security.Tests.Providers
             // Exception should be thrown
         }
 
+        #endregion
+
+        #region DeleteRole
+
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_DeleteRole_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_DeleteRoleWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const bool throwOnPopulatedRole = true;
-            var provider = new SqlServerRoleProvider();
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = null
+            };
 
             // Act
             provider.DeleteRole(RoleData.RoleName1, throwOnPopulatedRole);
@@ -108,8 +140,64 @@ namespace Dibware.Web.Security.Tests.Providers
         }
 
         [TestMethod]
+        public void Test_DeleteRoleNotPopulatedWithUsers_DeletesRole()
+        {
+            // Arrange
+            const bool throwOnPopulatedRole = true;
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
+
+            // Act
+            provider.DeleteRole(RoleData.RoleName3, throwOnPopulatedRole);
+
+            // Assert
+            Assert.IsFalse(provider.RoleExists(RoleData.RoleName1));
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Test_FindUsersInRolewithNullRepository_ThrowsInvalidOperationException()
+        public void Test_DeleteRolePopulatedWithUsersWithThrowOnPopulatedTrue_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            const bool throwOnPopulatedRole = true;
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
+
+            // Act
+            provider.DeleteRole(RoleData.RoleName1, throwOnPopulatedRole);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_DeleteRolePopulatedWithUsersWithThrowOnPopulatedFalse_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            const bool throwOnPopulatedRole = false;
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
+
+            // Act
+            provider.DeleteRole(RoleData.RoleName1, throwOnPopulatedRole);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region FindUsersInRole
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_FindUsersInRoleWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             var provider = new SqlServerRoleProvider
@@ -160,6 +248,10 @@ namespace Dibware.Web.Security.Tests.Providers
             CollectionAssert.DoesNotContain(users, UserData.UserName2);
         }
 
+        #endregion
+
+        #region GetAllRoles
+
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Test_GetAllRolesWithNullRepository_ThrowsInvalidOperationException()
@@ -197,6 +289,10 @@ namespace Dibware.Web.Security.Tests.Providers
             CollectionAssert.Contains(roles, RoleData.RoleName3);
         }
 
+        #endregion
+
+        #region GetRolesForUser
+
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Test_GetRolesForUserWithNullRepository_ThrowsInvalidOperationException()
@@ -231,6 +327,10 @@ namespace Dibware.Web.Security.Tests.Providers
             CollectionAssert.Contains(roles, RoleData.RoleName2);
         }
 
+        #endregion
+
+        #region GetUsersInRole
+
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void Test_GetUsersInRole_ThrowsNotImplementedException()
@@ -245,6 +345,10 @@ namespace Dibware.Web.Security.Tests.Providers
             // Exception should be thrown
         }
 
+        #endregion
+
+        #region IsUserInRole
+
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void Test_IsUserInRole_ThrowsNotImplementedException()
@@ -258,6 +362,10 @@ namespace Dibware.Web.Security.Tests.Providers
             // Assert
             // Exception should be thrown
         }
+
+        #endregion
+
+        #region RemoveUsersFromRoles
 
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
@@ -277,6 +385,10 @@ namespace Dibware.Web.Security.Tests.Providers
             // Exception should be thrown
         }
 
+        #endregion
+
+        #region RoleExists
+
         [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void Test_RoleExists_ThrowsNotImplementedException()
@@ -290,6 +402,8 @@ namespace Dibware.Web.Security.Tests.Providers
             // Assert
             // Exception should be thrown
         }
+
+        #endregion
 
         #endregion
     }

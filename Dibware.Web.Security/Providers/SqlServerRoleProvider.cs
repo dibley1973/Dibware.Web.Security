@@ -39,9 +39,25 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Removes a role from the data source for the configured applicationName.
+        /// </summary>
+        /// <param name="roleName">The name of the role to delete.</param>
+        /// <param name="throwOnPopulatedRole">If true, throw an exception if <paramref name="roleName" /> has one or more members and do not delete <paramref name="roleName" />.</param>
+        /// <returns>
+        /// true if the role was successfully deleted; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (RoleProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.RoleProviderRepositoryIsNull);
+            }
+
+            // Use the repository to Delete the role
+            return RoleProviderRepository.DeleteRole(roleName, throwOnPopulatedRole);
         }
 
         /// <summary>
@@ -119,9 +135,24 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the specified role name already exists in the role data source for the configured applicationName.
+        /// </summary>
+        /// <param name="roleName">The name of the role to search for in the data source.</param>
+        /// <returns>
+        /// true if the role name already exists in the data source for the configured applicationName; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public override bool RoleExists(string roleName)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (RoleProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.RoleProviderRepositoryIsNull);
+            }
+
+            // Use the repository to check if a role exist
+            return RoleProviderRepository.RoleExists(roleName);
         }
 
         #endregion
