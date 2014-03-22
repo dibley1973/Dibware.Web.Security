@@ -36,6 +36,12 @@ namespace Dibware.Web.Security.Providers
 
         public override void CreateRole(string roleName)
         {
+            // Validate arguments
+            if (RoleProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.RoleProviderRepositoryIsNull);
+            }
+
             throw new NotImplementedException();
         }
 

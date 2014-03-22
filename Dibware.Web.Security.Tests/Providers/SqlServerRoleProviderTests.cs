@@ -25,7 +25,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void TestInit()
         {
             // Mock all roles array
-            _allRolesList = new List<String>() { RoleData.RoleName1, RoleData.RoleName2, RoleData.RoleName3 };
+            _allRolesList = new List<String> { RoleData.RoleName1, RoleData.RoleName2, RoleData.RoleName3 };
             //_allRoles = new[] { RoleData.RoleName1, RoleData.RoleName2, RoleData.RoleName3 };
 
             // Mock role repository
@@ -52,8 +52,8 @@ namespace Dibware.Web.Security.Tests.Providers
                 .Returns(true);
 
             //_roleProviderRepository
-            //    .Setup(r => r.RoleExists(It.Is<String>(RoleData.RoleName3)))
-            //    .Returns(_allRolesList.Contains(RoleData.RoleName3));
+            //    .Setup(r => r.RoleExists(It.Is<String>(roleName)))
+            //    .Returns(_allRolesList.Contains(roleName));
         }
 
         #endregion
@@ -104,11 +104,31 @@ namespace Dibware.Web.Security.Tests.Providers
         #region CreateRole
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_CreateRoleWithNullRepository_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = null
+            };
+
+            // Act
+            provider.CreateRole(RoleData.RoleName1);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(NotImplementedException))]
         public void Test_CreateRole_ThrowsNotImplementedException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider();
+            var provider = new SqlServerRoleProvider
+            {
+                RoleProviderRepository = _roleProviderRepository.Object
+            };
 
             // Act
             provider.CreateRole(RoleData.RoleName1);
