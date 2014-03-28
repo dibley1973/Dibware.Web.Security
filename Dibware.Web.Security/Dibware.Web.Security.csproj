@@ -43,12 +43,15 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Principal\WebIdentity.cs" />
     <Compile Include="Principal\WebPrincipal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Contracts\ISqlServerRoleProviderRepository.cs" />
+    <Compile Include="Providers\Contracts\ISqlServerMembershipProvider.cs" />
+    <Compile Include="Providers\SqlServerMembershipProvider.cs" />
     <Compile Include="Providers\SqlServerRoleProvider.cs" />
     <Compile Include="Resources\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>

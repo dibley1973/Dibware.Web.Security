@@ -4,7 +4,23 @@ namespace Dibware.Web.Security.Tests.TestData
 {
     internal static class UserData
     {
-        public const String UserName1 = "Dave";
-        public const String UserName2 = "Jane";
+        internal class InvalidUser
+        {
+            public const String Username = "Sponklefield";
+            public const String Password = "anaplaster";
+
+        }
+        internal class UserDave
+        {
+            public const String Username = "Dave";
+            public const String Password = "Dave's Password";
+
+        }
+        internal class UserJane
+        {
+            public const String Username = "Jane";
+            public const String Password = "Jane's Password";
+
+        }
     }
 }

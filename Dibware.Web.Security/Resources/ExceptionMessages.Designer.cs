@@ -70,7 +70,16 @@ namespace Dibware.Web.Security.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Role Provider repository is null.
+        ///   Looks up a localized string similar to Membership Provider repository must not be null.
+        /// </summary>
+        internal static string MembershipProviderRepositoryIsNull {
+            get {
+                return ResourceManager.GetString("MembershipProviderRepositoryIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role Provider repository must not be null.
         /// </summary>
         internal static string RoleProviderRepositoryIsNull {
             get {

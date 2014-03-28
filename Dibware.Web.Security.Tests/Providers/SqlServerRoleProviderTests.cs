@@ -32,8 +32,8 @@ namespace Dibware.Web.Security.Tests.Providers
             _roleProviderRepository = new Mock<ISqlServerRoleProviderRepository>();
 
             _roleProviderRepository
-                .Setup(r => r.FindUsersInRole(RoleData.RoleName1, UserData.UserName1))
-                .Returns(new[] { UserData.UserName1 });
+                .Setup(r => r.FindUsersInRole(RoleData.RoleName1, UserData.UserDave.Username))
+                .Returns(new[] { UserData.UserDave.Username });
 
             _roleProviderRepository
                 .Setup(r => r.GetAllRoles())
@@ -67,7 +67,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_AddUsersToRoles_ThrowsNotImplementedException()
         {
             // Arrange
-            var usernames = new[] { UserData.UserName1, UserData.UserName2 };
+            var usernames = new[] { UserData.UserDave.Username, UserData.UserJane.Username };
             var roleNames = new[] { RoleData.RoleName1, RoleData.RoleName2 };
             var provider = new SqlServerRoleProvider();
 
@@ -228,7 +228,7 @@ namespace Dibware.Web.Security.Tests.Providers
             };
 
             // Act
-            provider.FindUsersInRole(RoleData.RoleName1, UserData.UserName1);
+            provider.FindUsersInRole(RoleData.RoleName1, UserData.UserDave.Username);
 
             // Assert
             // Exception should be thrown
@@ -245,11 +245,11 @@ namespace Dibware.Web.Security.Tests.Providers
             };
 
             // Act
-            var users = provider.FindUsersInRole(RoleData.RoleName1, UserData.UserName1);
+            var users = provider.FindUsersInRole(RoleData.RoleName1, UserData.UserDave.Username);
 
             // Assert
             Assert.AreEqual(expectedUserCount, users.Length);
-            CollectionAssert.Contains(users, UserData.UserName1);
+            CollectionAssert.Contains(users, UserData.UserDave.Username);
         }
 
         [TestMethod]
@@ -263,11 +263,11 @@ namespace Dibware.Web.Security.Tests.Providers
             };
 
             // Act
-            var users = provider.FindUsersInRole(RoleData.RoleName1, UserData.UserName1);
+            var users = provider.FindUsersInRole(RoleData.RoleName1, UserData.UserDave.Username);
 
             // Assert
             Assert.AreEqual(expectedUserCount, users.Length);
-            CollectionAssert.DoesNotContain(users, UserData.UserName2);
+            CollectionAssert.DoesNotContain(users, UserData.UserJane.Username);
         }
 
         #endregion
@@ -324,7 +324,7 @@ namespace Dibware.Web.Security.Tests.Providers
 
             // Act
             provider.RoleProviderRepository = null;
-            provider.GetRolesForUser(UserData.UserName1);
+            provider.GetRolesForUser(UserData.UserDave.Username);
 
             // Assert
             // Exception should be thrown
@@ -341,7 +341,7 @@ namespace Dibware.Web.Security.Tests.Providers
             };
 
             // Act
-            var roles = provider.GetRolesForUser(UserData.UserName1);
+            var roles = provider.GetRolesForUser(UserData.UserDave.Username);
 
             // Assert
             Assert.AreEqual(expectedRoleCount, roles.Length);
@@ -379,7 +379,7 @@ namespace Dibware.Web.Security.Tests.Providers
             var provider = new SqlServerRoleProvider();
 
             // Act
-            provider.IsUserInRole(UserData.UserName1, RoleData.RoleName1);
+            provider.IsUserInRole(UserData.UserDave.Username, RoleData.RoleName1);
 
             // Assert
             // Exception should be thrown
@@ -395,7 +395,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
 
-            var usernames = new[] { UserData.UserName1, UserData.UserName2 };
+            var usernames = new[] { UserData.UserDave.Username, UserData.UserJane.Username };
             var roleNames = new[] { RoleData.RoleName1, RoleData.RoleName2 };
 
             var provider = new SqlServerRoleProvider();
