@@ -3,6 +3,29 @@ Dibware.Web.Security
 
 A C# .Net 4.5 assembly for use with ASP.Net MVC websites
 
+## A WORK IN PROGRESS!!!
+
+## Prerequisit Assemblies
+* Ninject.dll
+* System
+* System.configuration
+* System.core
+* System.Web.ApplicationServices
+* WebMatrix.Webdata
+
+## Interfaces
+* ISqlServerMembershipProvider
+* ISqlServerRoleProviderRepository
+
+## Classes
+* SqlServerMembershipProvider
+* SqlServerRoleProvider
+* WebIdentity
+* WebPrincipal
+
+
+
+
 ## Git Commits
 * Name your commits in the following format YYYYMMDD-HHMM-IINN COMMENT
 * Where YYYY    = Year
