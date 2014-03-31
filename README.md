@@ -5,7 +5,7 @@ A C# .Net 4.5 assembly for use with ASP.Net MVC websites
 
 ## A WORK IN PROGRESS!!!
 
-## Prerequisit Assemblies
+## Prerequisite Assemblies
 * Ninject.dll
 * System
 * System.configuration
@@ -14,12 +14,12 @@ A C# .Net 4.5 assembly for use with ASP.Net MVC websites
 * WebMatrix.Webdata
 
 ## Interfaces
-* ISqlServerMembershipProvider
-* ISqlServerRoleProviderRepository
+* RepositoryMembershipProvider
+* RepositoryRoleProviderRepository
 
 ## Classes
-* SqlServerMembershipProvider
-* SqlServerRoleProvider
+* RepositoryMembershipProvider
+* RepositoryRoleProvider
 * WebIdentity
 * WebPrincipal
 
