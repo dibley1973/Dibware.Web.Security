@@ -12,7 +12,7 @@ namespace Dibware.Web.Security.Tests.Providers
     {
         #region Declarations
 
-        private Mock<ISqlServerMembershipProvider> _membershipProviderRepository;
+        private Mock<IRepositoryMembershipProviderRepository> _membershipProviderRepository;
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void TestInit()
         {
             // Mock role repository
-            _membershipProviderRepository = new Mock<ISqlServerMembershipProvider>();
+            _membershipProviderRepository = new Mock<IRepositoryMembershipProviderRepository>();
 
 
 
@@ -47,7 +47,7 @@ namespace Dibware.Web.Security.Tests.Providers
             // Arrange
             const String username = UserData.UserDave.Username;
             const String password = UserData.UserDave.Password;
-            var provider = new SqlServerMembershipProvider
+            var provider = new RepositoryMembershipProvider
             {
                 MembershipProviderRepository = null
             };
@@ -65,7 +65,7 @@ namespace Dibware.Web.Security.Tests.Providers
             // Arrange
             const String username = UserData.UserDave.Username;
             const String password = UserData.UserDave.Password;
-            var provider = new SqlServerMembershipProvider
+            var provider = new RepositoryMembershipProvider
             {
                 MembershipProviderRepository = _membershipProviderRepository.Object
             };
@@ -84,7 +84,7 @@ namespace Dibware.Web.Security.Tests.Providers
             // Arrange
             const String username = UserData.InvalidUser.Username;
             const String password = UserData.InvalidUser.Password;
-            var provider = new SqlServerMembershipProvider
+            var provider = new RepositoryMembershipProvider
             {
                 MembershipProviderRepository = _membershipProviderRepository.Object
             };

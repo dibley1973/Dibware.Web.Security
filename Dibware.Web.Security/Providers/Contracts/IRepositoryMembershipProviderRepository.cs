@@ -3,11 +3,10 @@
 namespace Dibware.Web.Security.Providers.Contracts
 {
     /// <summary>
-    /// defines the expected members for a SqlServerMembershipProvider
+    /// Defines the expected members for a RepositoryMembershipProvider repository
     /// </summary>
-    public interface ISqlServerMembershipProvider
+    public interface IRepositoryMembershipProviderRepository
     {
-
         /// <summary>
         /// Verifies that the specified user name and password exist in the data source.
         /// </summary>

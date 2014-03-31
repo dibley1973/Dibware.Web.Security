@@ -8,12 +8,15 @@ using WebMatrix.WebData;
 
 namespace Dibware.Web.Security.Providers
 {
-    public class SqlServerMembershipProvider : ExtendedMembershipProvider
+    /// <summary>
+    /// Represents a MembershipProvider that uses a repository as a data store
+    /// </summary>
+    public class RepositoryMembershipProvider : ExtendedMembershipProvider
     {
         #region Properties
 
         [Inject]
-        public ISqlServerMembershipProvider MembershipProviderRepository { get; set; }
+        public IRepositoryMembershipProviderRepository MembershipProviderRepository { get; set; }
 
         #endregion
 

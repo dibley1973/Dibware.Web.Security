@@ -15,7 +15,7 @@ namespace Dibware.Web.Security.Tests.Providers
 
         private List<String> _allRolesList;
         //private string[] _allRoles;
-        private Mock<ISqlServerRoleProviderRepository> _roleProviderRepository;
+        private Mock<IRepositoryRoleProviderRepository> _roleProviderRepository;
 
         #endregion
 
@@ -29,7 +29,7 @@ namespace Dibware.Web.Security.Tests.Providers
             //_allRoles = new[] { RoleData.RoleName1, RoleData.RoleName2, RoleData.RoleName3 };
 
             // Mock role repository
-            _roleProviderRepository = new Mock<ISqlServerRoleProviderRepository>();
+            _roleProviderRepository = new Mock<IRepositoryRoleProviderRepository>();
 
             _roleProviderRepository
                 .Setup(r => r.FindUsersInRole(RoleData.RoleName1, UserData.UserDave.Username))
@@ -69,7 +69,7 @@ namespace Dibware.Web.Security.Tests.Providers
             // Arrange
             var usernames = new[] { UserData.UserDave.Username, UserData.UserJane.Username };
             var roleNames = new[] { RoleData.RoleName1, RoleData.RoleName2 };
-            var provider = new SqlServerRoleProvider();
+            var provider = new RepositoryRoleProvider();
 
             // Act
             provider.AddUsersToRoles(usernames, roleNames);
@@ -87,7 +87,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const String expectedApplicationName = RoleProviderData.ApplicationName;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 ApplicationName = expectedApplicationName
             };
@@ -108,7 +108,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_CreateRoleWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = null
             };
@@ -125,7 +125,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_CreateRole_ThrowsNotImplementedException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -147,7 +147,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const bool throwOnPopulatedRole = true;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = null
             };
@@ -165,7 +165,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const bool throwOnPopulatedRole = true;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -184,7 +184,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const bool throwOnPopulatedRole = true;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -201,7 +201,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const bool throwOnPopulatedRole = false;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -222,7 +222,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_FindUsersInRoleWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = null
             };
@@ -239,7 +239,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const Int32 expectedUserCount = 1;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -257,7 +257,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const Int32 expectedUserCount = 1;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -279,7 +279,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_GetAllRolesWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = null
             };
@@ -296,7 +296,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const Int32 expectedRoleCount = RoleData.ExpectedRoleCount;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -320,7 +320,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_GetRolesForUserWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider();
+            var provider = new RepositoryRoleProvider();
 
             // Act
             provider.RoleProviderRepository = null;
@@ -335,7 +335,7 @@ namespace Dibware.Web.Security.Tests.Providers
         {
             // Arrange
             const Int32 expectedRoleCount = RoleData.ExpectedRoleCount;
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -358,7 +358,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_GetUsersInRole_ThrowsNotImplementedException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider();
+            var provider = new RepositoryRoleProvider();
 
             // Act
             provider.GetUsersInRole(RoleData.RoleName1);
@@ -376,7 +376,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_IsUserInRole_ThrowsNotImplementedException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider();
+            var provider = new RepositoryRoleProvider();
 
             // Act
             provider.IsUserInRole(UserData.UserDave.Username, RoleData.RoleName1);
@@ -398,7 +398,7 @@ namespace Dibware.Web.Security.Tests.Providers
             var usernames = new[] { UserData.UserDave.Username, UserData.UserJane.Username };
             var roleNames = new[] { RoleData.RoleName1, RoleData.RoleName2 };
 
-            var provider = new SqlServerRoleProvider();
+            var provider = new RepositoryRoleProvider();
 
             // Act
             provider.RemoveUsersFromRoles(usernames, roleNames);
@@ -416,7 +416,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_RoleExistsWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider();
+            var provider = new RepositoryRoleProvider();
 
             // Act
             provider.RoleExists(RoleData.RoleName1);
@@ -429,7 +429,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_RoleExists_ReturnsFalseForInvalidRole()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
@@ -445,7 +445,7 @@ namespace Dibware.Web.Security.Tests.Providers
         public void Test_RoleExists_ReturnsTrueForValidRole()
         {
             // Arrange
-            var provider = new SqlServerRoleProvider
+            var provider = new RepositoryRoleProvider
             {
                 RoleProviderRepository = _roleProviderRepository.Object
             };
