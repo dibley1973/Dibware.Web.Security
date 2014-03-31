@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Web.Security;
-using Dibware.Web.Security.Providers;
+﻿using Dibware.Web.Security.Providers;
 using Dibware.Web.Security.Providers.Contracts;
 using Dibware.Web.Security.Tests.TestData;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
+using System.Web.Security;
 
 namespace Dibware.Web.Security.Tests.Providers
 {
@@ -174,6 +174,28 @@ namespace Dibware.Web.Security.Tests.Providers
 
         #endregion
 
+        #region GetAccountsForUser
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_GetAccountsForUserWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.GetAccountsForUser(username);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
         #region GetCreateDate
 
         [TestMethod]
@@ -240,6 +262,50 @@ namespace Dibware.Web.Security.Tests.Providers
 
         #endregion
 
+        #region GetPasswordFailuresSinceLastSuccess
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_GetPasswordFailuresSinceLastSuccesseWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.GetPasswordFailuresSinceLastSuccess(username);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region GetUserIdFromPasswordResetToken
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_GetUserIdFromPasswordResetTokenWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String token = UserData.UserDave.Token;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.GetUserIdFromPasswordResetToken(token);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
         #region IsConfirmed
 
         [TestMethod]
@@ -262,7 +328,247 @@ namespace Dibware.Web.Security.Tests.Providers
 
         #endregion
 
+        #region ResetPasswordWithToken
 
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_ResetPasswordWithTokenWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String token = UserData.UserDave.Token;
+            const String newPassword = "NEW Pa55word";
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.ResetPasswordWithToken(token, newPassword);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region ApplicationName
+
+        [TestMethod]
+        public void Test_SettingAndGettingApplicationName_ReturnsCorrectName()
+        {
+            // Arrange
+            const String expectedAplicationName = "This App";
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            provider.ApplicationName = expectedAplicationName;
+            var result = provider.ApplicationName;
+
+            // Assert
+            Assert.AreEqual(expectedAplicationName, result);
+        }
+
+        #endregion
+
+        #region ChangePassword
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_ChangePasswordWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            const String oldPassword = UserData.UserDave.Password;
+            const String newPassword = "NEW Pa55word";
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.ChangePassword(username, oldPassword, newPassword);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region ChangePasswordQuestionAndAnswer
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_ChangePasswordQuestionAndAnswerWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            const String password = UserData.UserDave.Password;
+            const String newPasswordQuestion = UserData.UserDave.PasswordQuestion;
+            const String newPasswordAnswer = UserData.UserDave.PasswordAnswer;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.ChangePasswordQuestionAndAnswer(username, 
+                password, newPasswordQuestion, newPasswordAnswer);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region CreateUser
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_CreateUserWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            const String password = UserData.UserDave.Password;
+            const String email = UserData.UserDave.Email;
+            const String passwordQuestion = UserData.UserDave.PasswordQuestion;
+            const String passwordAnswer = UserData.UserDave.PasswordAnswer;
+            const Boolean isApproved = true;
+            object providerUserKey = null;
+            MembershipCreateStatus status;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.CreateUser(username, password, email, passwordQuestion,
+                passwordAnswer, isApproved, providerUserKey, out status);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region DeleteUser
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_DeleteUserWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            const Boolean deleteAllRelatedData = false;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.DeleteUser(username, deleteAllRelatedData);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region EnablePasswordReset
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_EnablePasswordResetWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.EnablePasswordReset;
+
+            // Assert
+            // Exception should be thrown
+        }
+        
+        #endregion
+
+        #region EnablePasswordRetrieval
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_EnablePasswordRetrievalWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.EnablePasswordRetrieval;
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region FindUsersByEmail
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_FindUsersByEmailWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String emailToMatch = UserData.UserDave.Email;
+            const int pageIndex = 1;
+            const int pageSize = 10;
+            int totalRecords;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.FindUsersByEmail(emailToMatch,
+                pageIndex, pageSize, out totalRecords);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
+
+        #region FindUsersByName
+
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void Test_FindUsersByNameWithNullRepository_ThrowsNotImplementedException()
+        {
+            // Arrange
+            const String usernameToMatch = UserData.UserDave.Username;
+            const int pageIndex = 1;
+            const int pageSize = 10;
+            int totalRecords;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.FindUsersByName(usernameToMatch, 
+                pageIndex, pageSize, out totalRecords);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        #endregion
 
         #region GetAllUsers
 
