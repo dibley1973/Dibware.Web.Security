@@ -104,5 +104,14 @@ namespace Dibware.Web.Security.Resources {
                 return ResourceManager.GetString("RolesMustNotBeNull", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User must not be null.
+        /// </summary>
+        internal static string UserIsNull {
+            get {
+                return ResourceManager.GetString("UserIsNull", resourceCulture);
+            }
+        }
     }
 }

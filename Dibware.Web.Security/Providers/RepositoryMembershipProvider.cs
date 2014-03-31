@@ -37,6 +37,17 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// When overridden in a derived class, creates a new user profile and a new membership account.
+        /// </summary>
+        /// <param name="userName">The user name.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="requireConfirmation">(Optional) true to specify that the user account must be confirmed; otherwise, false. The default is false.</param>
+        /// <param name="values">(Optional) A dictionary that contains additional user attributes to store in the user profile. The default is null.</param>
+        /// <returns>
+        /// A token that can be sent to the user to confirm the user account.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
         {
             throw new NotImplementedException();
@@ -148,8 +159,23 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the password for the specified user name from the data source.
+        /// </summary>
+        /// <param name="username">The user to retrieve the password for.</param>
+        /// <param name="answer">The password answer for the user.</param>
+        /// <returns>
+        /// The password for the specified user name.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="System.NotImplementedException"></exception>
         public override string GetPassword(string username, string answer)
         {
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
             throw new NotImplementedException();
         }
 

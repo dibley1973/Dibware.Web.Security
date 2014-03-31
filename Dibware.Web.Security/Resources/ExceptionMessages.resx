@@ -132,4 +132,7 @@
   <data name="RolesMustNotBeNull" xml:space="preserve">
     <value>Roles must not be null</value>
   </data>
+  <data name="UserIsNull" xml:space="preserve">
+    <value>User must not be null</value>
+  </data>
 </root>
