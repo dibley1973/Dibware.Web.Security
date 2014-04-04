@@ -1,22 +1,17 @@
-﻿using Dibware.Web.Security.Providers.Contracts;
-using Dibware.Web.Security.Resources;
-using Ninject;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Web.Security;
 using WebMatrix.WebData;
 
-namespace Dibware.Web.Security.Providers
+namespace Dibware.Web.Security.Providers.Contracts
 {
-    /// <summary>
-    /// Represents a MembershipProvider that uses a repository as a data store
-    /// </summary>
-    public class RepositoryMembershipProvider : ExtendedMembershipProvider, IRepositoryMembershipProvider
+    public interface IRepositoryMembershipProvider
     {
         #region Properties
 
-        [Inject]
-        public IRepositoryMembershipProviderRepository MembershipProviderRepository { get; set; }
+        IRepositoryMembershipProviderRepository MembershipProviderRepository { get; set; }
 
         #endregion
 
@@ -30,10 +25,7 @@ namespace Dibware.Web.Security.Providers
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ConfirmAccount(string accountConfirmationToken)
-        {
-            throw new NotImplementedException();
-        }
+        bool ConfirmAccount(string accountConfirmationToken);
 
         /// <summary>
         /// Activates a pending membership account for the specified user.
@@ -44,10 +36,7 @@ namespace Dibware.Web.Security.Providers
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ConfirmAccount(string userName, string accountConfirmationToken)
-        {
-            throw new NotImplementedException();
-        }
+        bool ConfirmAccount(string userName, string accountConfirmationToken);
 
         /// <summary>
         /// When overridden in a derived class, creates a new user account using the specified user name and password, optionally requiring that the new account must be confirmed before the account is available for use.
@@ -59,10 +48,7 @@ namespace Dibware.Web.Security.Providers
         /// A token that can be sent to the user to confirm the account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string CreateAccount(string userName, string password, bool requireConfirmationToken)
-        {
-            throw new NotImplementedException();
-        }
+        string CreateAccount(string userName, string password, bool requireConfirmationToken);
 
         /// <summary>
         /// When overridden in a derived class, creates a new user profile and a new membership account.
@@ -75,10 +61,7 @@ namespace Dibware.Web.Security.Providers
         /// A token that can be sent to the user to confirm the user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
-        {
-            throw new NotImplementedException();
-        }
+        string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values);
 
         /// <summary>
         /// When overridden in a derived class, deletes the specified membership account.
@@ -88,10 +71,7 @@ namespace Dibware.Web.Security.Providers
         /// true if the user account was deleted; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool DeleteAccount(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        bool DeleteAccount(string userName);
 
         /// <summary>
         /// When overridden in a derived class, generates a password reset token that can be sent to a user in email.
@@ -102,10 +82,7 @@ namespace Dibware.Web.Security.Providers
         /// A token to send to the user.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow)
-        {
-            throw new NotImplementedException();
-        }
+        string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow);
 
         /// <summary>
         /// When overridden in a derived class, returns all OAuth membership accounts associated with the specified user name.
@@ -115,10 +92,7 @@ namespace Dibware.Web.Security.Providers
         /// A list of all OAuth membership accounts associated with the specified user name.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override ICollection<OAuthAccountData> GetAccountsForUser(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        ICollection<OAuthAccountData> GetAccountsForUser(string userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the date and time when the specified user account was created.
@@ -128,10 +102,7 @@ namespace Dibware.Web.Security.Providers
         /// The date and time the account was created, or <see cref="F:System.DateTime.MinValue" /> if the account creation date is not available.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override DateTime GetCreateDate(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        DateTime GetCreateDate(string userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the date and time when an incorrect password was most recently entered for the specified user account.
@@ -141,10 +112,7 @@ namespace Dibware.Web.Security.Providers
         /// The date and time when an incorrect password was most recently entered for this user account, or <see cref="F:System.DateTime.MinValue" /> if an incorrect password has not been entered for this user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override DateTime GetLastPasswordFailureDate(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        DateTime GetLastPasswordFailureDate(string userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the date and time when the password was most recently changed for the specified membership account.
@@ -154,10 +122,7 @@ namespace Dibware.Web.Security.Providers
         /// The date and time when the password was more recently changed for membership account, or <see cref="F:System.DateTime.MinValue" /> if the password has never been changed for this user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override DateTime GetPasswordChangedDate(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        DateTime GetPasswordChangedDate(string userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the number of times that the password for the specified user account was incorrectly entered since the most recent successful login or since the user account was created.
@@ -167,10 +132,7 @@ namespace Dibware.Web.Security.Providers
         /// The count of failed password attempts for the specified user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override int GetPasswordFailuresSinceLastSuccess(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        int GetPasswordFailuresSinceLastSuccess(string userName);
 
         /// <summary>
         /// When overridden in a derived class, returns an ID for a user based on a password reset token.
@@ -180,10 +142,7 @@ namespace Dibware.Web.Security.Providers
         /// The user ID.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override int GetUserIdFromPasswordResetToken(string token)
-        {
-            throw new NotImplementedException();
-        }
+        int GetUserIdFromPasswordResetToken(string token);
 
         /// <summary>
         /// When overridden in a derived class, returns a value that indicates whether the user account has been confirmed by the provider.
@@ -193,10 +152,7 @@ namespace Dibware.Web.Security.Providers
         /// true if the user is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool IsConfirmed(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        bool IsConfirmed(string userName);
 
         /// <summary>
         /// When overridden in a derived class, resets a password after verifying that the specified password reset token is valid.
@@ -207,66 +163,33 @@ namespace Dibware.Web.Security.Providers
         /// true if the password was changed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ResetPasswordWithToken(string token, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
+        bool ResetPasswordWithToken(string token, string newPassword);
 
         /// <summary>
         /// The name of the application using the custom membership provider.
         /// </summary>
         /// <returns>The name of the application using the custom membership provider.</returns>
-        public override string ApplicationName { get; set; }
+        string ApplicationName { get; set; }
 
-        public override bool ChangePassword(string username, string oldPassword, string newPassword)
-        {
-            throw new NotImplementedException();
-        }
+        bool ChangePassword(string username, string oldPassword, string newPassword);
 
-        public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
-        {
-            throw new NotImplementedException();
-        }
+        bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer);
 
-        public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
-        {
-            throw new NotImplementedException();
-        }
+        MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status);
 
-        public override bool DeleteUser(string username, bool deleteAllRelatedData)
-        {
-            throw new NotImplementedException();
-        }
+        bool DeleteUser(string username, bool deleteAllRelatedData);
 
-        public override bool EnablePasswordReset
-        {
-            get { throw new NotImplementedException(); }
-        }
+        bool EnablePasswordReset { get; }
 
-        public override bool EnablePasswordRetrieval
-        {
-            get { throw new NotImplementedException(); }
-        }
+        bool EnablePasswordRetrieval { get; }
 
-        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
-        {
-            throw new NotImplementedException();
-        }
+        MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords);
 
-        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
-        {
-            throw new NotImplementedException();
-        }
+        MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords);
 
-        public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
-        {
-            throw new NotImplementedException();
-        }
+        MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords);
 
-        public override int GetNumberOfUsersOnline()
-        {
-            throw new NotImplementedException();
-        }
+        int GetNumberOfUsersOnline();
 
         /// <summary>
         /// Gets the password for the specified user name from the data source.
@@ -278,85 +201,35 @@ namespace Dibware.Web.Security.Providers
         /// </returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string GetPassword(string username, string answer)
-        {
-            // Validate arguments
-            if (MembershipProviderRepository == null)
-            {
-                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
-            }
-            throw new NotImplementedException();
-        }
+        string GetPassword(string username, string answer);
 
-        public override MembershipUser GetUser(string username, bool userIsOnline)
-        {
-            throw new NotImplementedException();
-        }
+        MembershipUser GetUser(string username, bool userIsOnline);
 
-        public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
-        {
-            throw new NotImplementedException();
-        }
+        MembershipUser GetUser(object providerUserKey, bool userIsOnline);
 
-        public override string GetUserNameByEmail(string email)
-        {
-            throw new NotImplementedException();
-        }
+        string GetUserNameByEmail(string email);
 
-        public override int MaxInvalidPasswordAttempts
-        {
-            get { throw new NotImplementedException(); }
-        }
+        int MaxInvalidPasswordAttempts { get; }
 
-        public override int MinRequiredNonAlphanumericCharacters
-        {
-            get { throw new NotImplementedException(); }
-        }
+        int MinRequiredNonAlphanumericCharacters { get; }
 
-        public override int MinRequiredPasswordLength
-        {
-            get { throw new NotImplementedException(); }
-        }
+        int MinRequiredPasswordLength { get; }
 
-        public override int PasswordAttemptWindow
-        {
-            get { throw new NotImplementedException(); }
-        }
+        int PasswordAttemptWindow { get; }
 
-        public override MembershipPasswordFormat PasswordFormat
-        {
-            get { throw new NotImplementedException(); }
-        }
+        MembershipPasswordFormat PasswordFormat { get; }
 
-        public override string PasswordStrengthRegularExpression
-        {
-            get { throw new NotImplementedException(); }
-        }
+        String PasswordStrengthRegularExpression { get; }
 
-        public override bool RequiresQuestionAndAnswer
-        {
-            get { throw new NotImplementedException(); }
-        }
+        bool RequiresQuestionAndAnswer { get; }
 
-        public override bool RequiresUniqueEmail
-        {
-            get { throw new NotImplementedException(); }
-        }
+        bool RequiresUniqueEmail { get; }
 
-        public override string ResetPassword(string username, string answer)
-        {
-            throw new NotImplementedException();
-        }
+        string ResetPassword(string username, string answer);
 
-        public override bool UnlockUser(string userName)
-        {
-            throw new NotImplementedException();
-        }
+        bool UnlockUser(string userName);
 
-        public override void UpdateUser(MembershipUser user)
-        {
-            throw new NotImplementedException();
-        }
+        void UpdateUser(MembershipUser user);
 
         /// <summary>
         /// Verifies that the specified user name and password exist in the data source.
@@ -368,16 +241,7 @@ namespace Dibware.Web.Security.Providers
         /// </returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ValidateUser(string username, string password)
-        {
-            // Validate arguments
-            if (MembershipProviderRepository == null)
-            {
-                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
-            }
-            return MembershipProviderRepository.ValidateUser(username, password);
-            //throw new NotImplementedException();
-        }
+        bool ValidateUser(string username, string password);
 
         #endregion
     }

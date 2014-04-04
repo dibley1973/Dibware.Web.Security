@@ -45,6 +45,7 @@
     <Compile Include="Principal\WebIdentity.cs" />
     <Compile Include="Principal\WebPrincipal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\Contracts\IRepositoryMembershipProvider.cs" />
     <Compile Include="Providers\Contracts\IRepositoryRoleProviderRepository.cs" />
     <Compile Include="Providers\Contracts\IRepositoryMembershipProviderRepository.cs" />
     <Compile Include="Providers\RepositoryMembershipProvider.cs" />
