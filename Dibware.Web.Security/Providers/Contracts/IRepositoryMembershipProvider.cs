@@ -25,7 +25,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        bool ConfirmAccount(string accountConfirmationToken);
+        Boolean ConfirmAccount(String accountConfirmationToken);
 
         /// <summary>
         /// Activates a pending membership account for the specified user.
@@ -36,7 +36,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        bool ConfirmAccount(string userName, string accountConfirmationToken);
+        Boolean ConfirmAccount(String userName, String accountConfirmationToken);
 
         /// <summary>
         /// When overridden in a derived class, creates a new user account using the specified user name and password, optionally requiring that the new account must be confirmed before the account is available for use.
@@ -48,7 +48,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// A token that can be sent to the user to confirm the account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        string CreateAccount(string userName, string password, bool requireConfirmationToken);
+        String CreateAccount(String userName, String password, Boolean requireConfirmationToken);
 
         /// <summary>
         /// When overridden in a derived class, creates a new user profile and a new membership account.
@@ -61,7 +61,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// A token that can be sent to the user to confirm the user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values);
+        String CreateUserAndAccount(String userName, String password, Boolean requireConfirmation, IDictionary<String, object> values);
 
         /// <summary>
         /// When overridden in a derived class, deletes the specified membership account.
@@ -71,7 +71,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// true if the user account was deleted; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        bool DeleteAccount(string userName);
+        Boolean DeleteAccount(String userName);
 
         /// <summary>
         /// When overridden in a derived class, generates a password reset token that can be sent to a user in email.
@@ -82,7 +82,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// A token to send to the user.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow);
+        String GeneratePasswordResetToken(String userName, int tokenExpirationInMinutesFromNow);
 
         /// <summary>
         /// When overridden in a derived class, returns all OAuth membership accounts associated with the specified user name.
@@ -92,7 +92,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// A list of all OAuth membership accounts associated with the specified user name.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        ICollection<OAuthAccountData> GetAccountsForUser(string userName);
+        ICollection<OAuthAccountData> GetAccountsForUser(String userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the date and time when the specified user account was created.
@@ -102,7 +102,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// The date and time the account was created, or <see cref="F:System.DateTime.MinValue" /> if the account creation date is not available.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        DateTime GetCreateDate(string userName);
+        DateTime GetCreateDate(String userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the date and time when an incorrect password was most recently entered for the specified user account.
@@ -112,7 +112,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// The date and time when an incorrect password was most recently entered for this user account, or <see cref="F:System.DateTime.MinValue" /> if an incorrect password has not been entered for this user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        DateTime GetLastPasswordFailureDate(string userName);
+        DateTime GetLastPasswordFailureDate(String userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the date and time when the password was most recently changed for the specified membership account.
@@ -122,7 +122,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// The date and time when the password was more recently changed for membership account, or <see cref="F:System.DateTime.MinValue" /> if the password has never been changed for this user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        DateTime GetPasswordChangedDate(string userName);
+        DateTime GetPasswordChangedDate(String userName);
 
         /// <summary>
         /// When overridden in a derived class, returns the number of times that the password for the specified user account was incorrectly entered since the most recent successful login or since the user account was created.
@@ -132,7 +132,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// The count of failed password attempts for the specified user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        int GetPasswordFailuresSinceLastSuccess(string userName);
+        int GetPasswordFailuresSinceLastSuccess(String userName);
 
         /// <summary>
         /// When overridden in a derived class, returns an ID for a user based on a password reset token.
@@ -142,7 +142,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// The user ID.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        int GetUserIdFromPasswordResetToken(string token);
+        int GetUserIdFromPasswordResetToken(String token);
 
         /// <summary>
         /// When overridden in a derived class, returns a value that indicates whether the user account has been confirmed by the provider.
@@ -152,7 +152,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// true if the user is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        bool IsConfirmed(string userName);
+        Boolean IsConfirmed(String userName);
 
         /// <summary>
         /// When overridden in a derived class, resets a password after verifying that the specified password reset token is valid.
@@ -163,29 +163,29 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// true if the password was changed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        bool ResetPasswordWithToken(string token, string newPassword);
+        Boolean ResetPasswordWithToken(String token, String newPassword);
 
         /// <summary>
         /// The name of the application using the custom membership provider.
         /// </summary>
         /// <returns>The name of the application using the custom membership provider.</returns>
-        string ApplicationName { get; set; }
+        String ApplicationName { get; set; }
 
-        bool ChangePassword(string username, string oldPassword, string newPassword);
+        Boolean ChangePassword(String username, String oldPassword, String newPassword);
 
-        bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer);
+        Boolean ChangePasswordQuestionAndAnswer(String username, String password, String newPasswordQuestion, String newPasswordAnswer);
 
-        MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status);
+        MembershipUser CreateUser(String username, String password, String email, String passwordQuestion, String passwordAnswer, Boolean isApproved, object providerUserKey, out MembershipCreateStatus status);
 
-        bool DeleteUser(string username, bool deleteAllRelatedData);
+        Boolean DeleteUser(String username, Boolean deleteAllRelatedData);
 
-        bool EnablePasswordReset { get; }
+        Boolean EnablePasswordReset { get; }
 
-        bool EnablePasswordRetrieval { get; }
+        Boolean EnablePasswordRetrieval { get; }
 
-        MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords);
+        MembershipUserCollection FindUsersByEmail(String emailToMatch, int pageIndex, int pageSize, out int totalRecords);
 
-        MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords);
+        MembershipUserCollection FindUsersByName(String usernameToMatch, int pageIndex, int pageSize, out int totalRecords);
 
         MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords);
 
@@ -201,13 +201,13 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// </returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.NotImplementedException"></exception>
-        string GetPassword(string username, string answer);
+        String GetPassword(String username, String answer);
 
-        MembershipUser GetUser(string username, bool userIsOnline);
+        MembershipUser GetUser(String username, Boolean userIsOnline);
 
-        MembershipUser GetUser(object providerUserKey, bool userIsOnline);
+        MembershipUser GetUser(object providerUserKey, Boolean userIsOnline);
 
-        string GetUserNameByEmail(string email);
+        String GetUserNameByEmail(String email);
 
         int MaxInvalidPasswordAttempts { get; }
 
@@ -221,13 +221,13 @@ namespace Dibware.Web.Security.Providers.Contracts
 
         String PasswordStrengthRegularExpression { get; }
 
-        bool RequiresQuestionAndAnswer { get; }
+        Boolean RequiresQuestionAndAnswer { get; }
 
-        bool RequiresUniqueEmail { get; }
+        Boolean RequiresUniqueEmail { get; }
 
-        string ResetPassword(string username, string answer);
+        String ResetPassword(String username, String answer);
 
-        bool UnlockUser(string userName);
+        Boolean UnlockUser(String userName);
 
         void UpdateUser(MembershipUser user);
 
@@ -241,7 +241,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// </returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.NotImplementedException"></exception>
-        bool ValidateUser(string username, string password);
+        Boolean ValidateUser(String username, String password);
 
         #endregion
     }

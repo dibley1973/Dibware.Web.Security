@@ -6,7 +6,7 @@ using System.Web.Security;
 
 namespace Dibware.Web.Security.Providers
 {
-    public class RepositoryRoleProvider : RoleProvider
+    public class RepositoryRoleProvider : RoleProvider, IRepositoryRoleProvider
     {
         #region Properties
 
