@@ -26,8 +26,16 @@ namespace Dibware.Web.Security.Tests.Providers
             // Mock role repository
             _membershipProviderRepository = new Mock<IRepositoryMembershipProviderRepository>();
 
+            // CreateUserAndAccount
+            _membershipProviderRepository
+                .Setup(r => r.CreateUserAndAccount(
+                    UserData.UserDave.Username,
+                    UserData.UserDave.Password,
+                    true,
+                    new Dictionary<String, Object>()))
+                .Returns(MembershipProviderData.Token);
 
-
+            // ValidateUser
             _membershipProviderRepository
                 .Setup(r => r.ValidateUser(UserData.InvalidUser.Username, UserData.InvalidUser.Password))
                 .Returns(false);
@@ -107,8 +115,8 @@ namespace Dibware.Web.Security.Tests.Providers
         #region CreateUserAndAccount
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_CreateUserAndAccountUsingNameWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_CreateUserAndAccountUsingNameWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String password = UserData.UserDave.Password;
@@ -125,6 +133,26 @@ namespace Dibware.Web.Security.Tests.Providers
 
             // Assert
             // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_CreateUserAndAccountUsingNameWithValidRepository_ReturnsToken()
+        {
+            // Arrange
+            const String password = UserData.UserDave.Password;
+            const String username = UserData.UserDave.Username;
+            const Boolean requireConfirmationToken = true;
+            IDictionary<string, object> values = new Dictionary<string, object>();
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.CreateUserAndAccount(username, password, requireConfirmationToken, values);
+
+            // Assert
+            Assert.AreEqual(MembershipProviderData.Token, result);
         }
 
         #endregion
@@ -414,7 +442,7 @@ namespace Dibware.Web.Security.Tests.Providers
             };
 
             // Act
-            var result = provider.ChangePasswordQuestionAndAnswer(username, 
+            var result = provider.ChangePasswordQuestionAndAnswer(username,
                 password, newPasswordQuestion, newPasswordAnswer);
 
             // Assert
@@ -494,7 +522,7 @@ namespace Dibware.Web.Security.Tests.Providers
             // Assert
             // Exception should be thrown
         }
-        
+
         #endregion
 
         #region EnablePasswordRetrieval
@@ -561,7 +589,7 @@ namespace Dibware.Web.Security.Tests.Providers
             };
 
             // Act
-            var result = provider.FindUsersByName(usernameToMatch, 
+            var result = provider.FindUsersByName(usernameToMatch,
                 pageIndex, pageSize, out totalRecords);
 
             // Assert

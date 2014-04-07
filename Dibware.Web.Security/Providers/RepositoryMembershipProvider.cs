@@ -77,7 +77,12 @@ namespace Dibware.Web.Security.Providers
         /// <exception cref="System.NotImplementedException"></exception>
         public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            return MembershipProviderRepository.CreateUserAndAccount(userName, password, requireConfirmation, values);
         }
 
         /// <summary>
@@ -376,7 +381,6 @@ namespace Dibware.Web.Security.Providers
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
             }
             return MembershipProviderRepository.ValidateUser(username, password);
-            //throw new NotImplementedException();
         }
 
         #endregion
