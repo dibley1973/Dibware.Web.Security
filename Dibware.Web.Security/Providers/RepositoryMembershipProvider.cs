@@ -3,6 +3,7 @@ using Dibware.Web.Security.Resources;
 using Ninject;
 using System;
 using System.Collections.Generic;
+using System.Web.Configuration;
 using System.Web.Security;
 using WebMatrix.WebData;
 
@@ -380,7 +381,26 @@ namespace Dibware.Web.Security.Providers
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
             }
-            return MembershipProviderRepository.ValidateUser(username, password);
+
+            var encriptedPassword = GetEncryptedValue(password);
+            return MembershipProviderRepository.ValidateUser(username, encriptedPassword);
+        }
+
+        #endregion
+
+        #region Methods - Private
+
+        /// <summary>
+        /// Gets the encrypted version of the specified value
+        /// </summary>
+        /// <param name="value">The value to encrypt</param>
+        /// <returns>The encrypted value.</returns>
+        private String GetEncryptedValue(String value)
+        {
+            byte[] data = System.Text.Encoding.ASCII.GetBytes(value);
+            var encryptedData = EncryptPassword(data, MembershipPasswordCompatibilityMode.Framework40);
+            var encriptedValue = encryptedData.ToString();
+            return encriptedValue;
         }
 
         #endregion
