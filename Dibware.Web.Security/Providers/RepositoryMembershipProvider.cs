@@ -398,7 +398,7 @@ namespace Dibware.Web.Security.Providers
         private String GetEncryptedValue(String value)
         {
             byte[] data = System.Text.Encoding.ASCII.GetBytes(value);
-            var encryptedData = EncryptPassword(data, MembershipPasswordCompatibilityMode.Framework40);
+            var encryptedData = EncryptPassword(data);
             var encriptedValue = encryptedData.ToString();
             return encriptedValue;
         }
