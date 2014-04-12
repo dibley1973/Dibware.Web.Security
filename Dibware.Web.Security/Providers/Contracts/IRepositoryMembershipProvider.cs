@@ -11,6 +11,14 @@ namespace Dibware.Web.Security.Providers.Contracts
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the encryptor for the Pprovider
+        /// </summary>
+        IRepositoryMembershipProviderEncryptor RepositoryMembershipProviderEncryptor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repository for the provider
+        /// </summary>
         IRepositoryMembershipProviderRepository MembershipProviderRepository { get; set; }
 
         #endregion

@@ -14,6 +14,7 @@ namespace Dibware.Web.Security.Tests.Providers
     {
         #region Declarations
 
+        private Mock<IRepositoryMembershipProviderEncryptor> _membershipProviderEncryptor;
         private Mock<IRepositoryMembershipProviderRepository> _membershipProviderRepository;
 
         #endregion
@@ -23,10 +24,19 @@ namespace Dibware.Web.Security.Tests.Providers
         [TestInitialize]
         public void TestInit()
         {
+            // Mock the encryptor
+            _membershipProviderEncryptor = new Mock<IRepositoryMembershipProviderEncryptor>();
+            
+            // .EncryptValue
+            _membershipProviderEncryptor
+                .Setup(e => e.EncryptValue(
+                    UserData.UserDave.Password))
+                .Returns(UserData.UserDave.EncryptedPassword);
+
             // Mock role repository
             _membershipProviderRepository = new Mock<IRepositoryMembershipProviderRepository>();
 
-            // CreateUserAndAccount
+            // .CreateUserAndAccount
             _membershipProviderRepository
                 .Setup(r => r.CreateUserAndAccount(
                     UserData.UserDave.Username,
@@ -35,13 +45,13 @@ namespace Dibware.Web.Security.Tests.Providers
                     new Dictionary<String, Object>()))
                 .Returns(MembershipProviderData.Token);
 
-            // ValidateUser
+            // .ValidateUser
             _membershipProviderRepository
                 .Setup(r => r.ValidateUser(UserData.InvalidUser.Username, UserData.InvalidUser.Password))
                 .Returns(false);
 
             _membershipProviderRepository
-                .Setup(r => r.ValidateUser(UserData.UserDave.Username, UserData.UserDave.Password))
+                .Setup(r => r.ValidateUser(UserData.UserDave.Username, UserData.UserDave.EncryptedPassword))
                 .Returns(true);
         }
 
@@ -1005,6 +1015,26 @@ namespace Dibware.Web.Security.Tests.Providers
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_ValidateUserWithNullEncrypytor_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            const String password = UserData.UserDave.Password;
+            var provider = new RepositoryMembershipProvider
+            {
+                RepositoryMembershipProviderEncryptor =null,
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            provider.ValidateUser(username, password);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        [TestMethod]
         public void Test_ValidateUserWithValidCredentials_ReturnsTrue()
         {
             // Arrange
@@ -1012,6 +1042,7 @@ namespace Dibware.Web.Security.Tests.Providers
             const String password = UserData.UserDave.Password;
             var provider = new RepositoryMembershipProvider
             {
+                RepositoryMembershipProviderEncryptor = _membershipProviderEncryptor.Object,
                 MembershipProviderRepository = _membershipProviderRepository.Object
             };
 
@@ -1031,6 +1062,7 @@ namespace Dibware.Web.Security.Tests.Providers
             const String password = UserData.InvalidUser.Password;
             var provider = new RepositoryMembershipProvider
             {
+                RepositoryMembershipProviderEncryptor = _membershipProviderEncryptor.Object,
                 MembershipProviderRepository = _membershipProviderRepository.Object
             };
 

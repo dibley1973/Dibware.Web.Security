@@ -46,6 +46,7 @@
     <Compile Include="Principal\WebPrincipal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\Contracts\IRepositoryMembershipProvider.cs" />
+    <Compile Include="Providers\Contracts\IRepositoryMembershipProviderEncryptor.cs" />
     <Compile Include="Providers\Contracts\IRepositoryRoleProvider.cs" />
     <Compile Include="Providers\Contracts\IRepositoryRoleProviderRepository.cs" />
     <Compile Include="Providers\Contracts\IRepositoryMembershipProviderRepository.cs" />

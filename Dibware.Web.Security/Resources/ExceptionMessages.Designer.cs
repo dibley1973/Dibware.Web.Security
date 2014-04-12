@@ -70,6 +70,15 @@ namespace Dibware.Web.Security.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Membership Provider encryptor must not be null.
+        /// </summary>
+        internal static string MembershipProviderEncryptorIsNull {
+            get {
+                return ResourceManager.GetString("MembershipProviderEncryptorIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Membership Provider repository must not be null.
         /// </summary>
         internal static string MembershipProviderRepositoryIsNull {

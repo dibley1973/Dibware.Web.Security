@@ -120,6 +120,9 @@
   <data name="IdentityMustNotBeNull" xml:space="preserve">
     <value>Identity must not be null</value>
   </data>
+  <data name="MembershipProviderEncryptorIsNull" xml:space="preserve">
+    <value>Membership Provider encryptor must not be null</value>
+  </data>
   <data name="MembershipProviderRepositoryIsNull" xml:space="preserve">
     <value>Membership Provider repository must not be null</value>
   </data>

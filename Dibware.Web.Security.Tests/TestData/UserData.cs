@@ -16,6 +16,7 @@ namespace Dibware.Web.Security.Tests.TestData
             public const String AccountConfirmationToken = "EABC#";
             public const String Answer = "Mondeo";
             public const String Email = "dave@anywhere.com";
+            public const String EncryptedPassword = "w*Ndhf%s-kl2";
             public const String Password = "Dave's Password";
             public const String PasswordQuestion = "Whats my pet?";
             public const String PasswordAnswer = "A fluffy little goldfish";

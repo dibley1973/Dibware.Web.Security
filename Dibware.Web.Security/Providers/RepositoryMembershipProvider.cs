@@ -16,6 +16,15 @@ namespace Dibware.Web.Security.Providers
     {
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the encryptor for the Pprovider
+        /// </summary>
+        [Inject]
+        public IRepositoryMembershipProviderEncryptor RepositoryMembershipProviderEncryptor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the repository for the provider
+        /// </summary>
         [Inject]
         public IRepositoryMembershipProviderRepository MembershipProviderRepository { get; set; }
 
@@ -372,37 +381,44 @@ namespace Dibware.Web.Security.Providers
         /// <returns>
         /// true if the specified username and password are valid; otherwise, false.
         /// </returns>
-        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if either MembershipProviderRepository or 
+        /// RepositoryMembershipProviderEncryptor is null.
+        /// </exception>
         /// <exception cref="System.NotImplementedException"></exception>
         public override bool ValidateUser(string username, string password)
         {
-            // Validate arguments
+            // Validate Properties have been set
             if (MembershipProviderRepository == null)
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
             }
+            if(RepositoryMembershipProviderEncryptor == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderEncryptorIsNull);
+            }
 
-            var encriptedPassword = GetEncryptedValue(password);
+            var encriptedPassword =RepositoryMembershipProviderEncryptor.EncryptValue(password);
             return MembershipProviderRepository.ValidateUser(username, encriptedPassword);
         }
 
         #endregion
 
-        #region Methods - Private
+        //#region Methods - Private
 
-        /// <summary>
-        /// Gets the encrypted version of the specified value
-        /// </summary>
-        /// <param name="value">The value to encrypt</param>
-        /// <returns>The encrypted value.</returns>
-        private String GetEncryptedValue(String value)
-        {
-            byte[] data = System.Text.Encoding.ASCII.GetBytes(value);
-            var encryptedData = EncryptPassword(data);
-            var encriptedValue = encryptedData.ToString();
-            return encriptedValue;
-        }
+        ///// <summary>
+        ///// Gets the encrypted version of the specified value
+        ///// </summary>
+        ///// <param name="value">The value to encrypt</param>
+        ///// <returns>The encrypted value.</returns>
+        //private String GetEncryptedValue(String value)
+        //{
+        //    byte[] data = System.Text.Encoding.ASCII.GetBytes(value);
+        //    var encryptedData = EncryptPassword(data);
+        //    var encriptedValue = encryptedData.ToString();
+        //    return encriptedValue;
+        //}
 
-        #endregion
+        //#endregion
     }
 }
