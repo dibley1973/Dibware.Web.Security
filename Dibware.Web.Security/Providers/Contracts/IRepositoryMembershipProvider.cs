@@ -12,9 +12,9 @@ namespace Dibware.Web.Security.Providers.Contracts
         #region Properties
 
         /// <summary>
-        /// Gets or sets the encryptor for the Pprovider
+        /// Gets or sets the password service for the provider
         /// </summary>
-        IRepositoryMembershipProviderEncryptor RepositoryMembershipProviderEncryptor { get; set; }
+        IRepositoryMembershipProviderPasswordService RepositoryMembershipProviderPasswordService { get; set; }
 
         /// <summary>
         /// Gets or sets the repository for the provider

@@ -20,7 +20,7 @@ namespace Dibware.Web.Security.Providers
         /// Gets or sets the encryptor for the Pprovider
         /// </summary>
         [Inject]
-        public IRepositoryMembershipProviderEncryptor RepositoryMembershipProviderEncryptor { get; set; }
+        public IRepositoryMembershipProviderPasswordService RepositoryMembershipProviderPasswordService { get; set; }
 
         /// <summary>
         /// Gets or sets the repository for the provider
@@ -393,26 +393,42 @@ namespace Dibware.Web.Security.Providers
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
             }
-            if(RepositoryMembershipProviderEncryptor == null)
+            if (RepositoryMembershipProviderPasswordService == null)
             {
-                throw new InvalidOperationException(ExceptionMessages.MembershipProviderEncryptorIsNull);
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
             }
 
-            // Try and get the salt for the user. 
-            var salt = MembershipProviderRepository.GetPasswordSalt(username);
-            
-            // If a 'salt' is NOT found ...
-            if(String.IsNullOrEmpty(salt))
+            // Try and get the hashed password for the supplied username
+            var actualPasswordHash = MembershipProviderRepository.GetHashedPassword(username);
+
+            // If a hashed password for the username is NOT found ...
+            if (String.IsNullOrEmpty(actualPasswordHash))
             {
                 // ...then validation has already failed
                 return false;
             }
 
-            // So we have a salt, now lets get the encrypted password
-            var encriptedPassword = RepositoryMembershipProviderEncryptor.EncryptValue(password, salt);
+            // So we got a hasshed password,
+            var isValid = RepositoryMembershipProviderPasswordService.ValidatePassword(password, actualPasswordHash);
+            return isValid;
 
-            // And finally validat the user against the encrypted password.
-            return MembershipProviderRepository.ValidateUser(username, encriptedPassword);
+
+
+            //// Try and get the salt for the user. 
+            //var salt = MembershipProviderRepository.GetPasswordSalt(username);
+
+            //// If a 'salt' is NOT found ...
+            //if(String.IsNullOrEmpty(salt))
+            //{
+            //    // ...then validation has already failed
+            //    return false;
+            //}
+
+            //// So we have a salt, now lets get the encrypted password
+            //var encriptedPassword = RepositoryMembershipProviderPasswordService.EncryptValue(password, salt);
+
+            //// And finally validat the user against the encrypted password.
+            //return MembershipProviderRepository.ValidateUser(username, encriptedPassword);
         }
 
         #endregion

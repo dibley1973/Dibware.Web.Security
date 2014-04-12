@@ -70,11 +70,11 @@ namespace Dibware.Web.Security.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Membership Provider encryptor must not be null.
+        ///   Looks up a localized string similar to Membership Provider password service must not be null.
         /// </summary>
-        internal static string MembershipProviderEncryptorIsNull {
+        internal static string MembershipProviderPasswordServiceIsNull {
             get {
-                return ResourceManager.GetString("MembershipProviderEncryptorIsNull", resourceCulture);
+                return ResourceManager.GetString("MembershipProviderPasswordServiceIsNull", resourceCulture);
             }
         }
         

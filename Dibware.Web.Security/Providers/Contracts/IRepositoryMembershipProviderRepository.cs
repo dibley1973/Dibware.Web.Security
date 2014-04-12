@@ -23,11 +23,11 @@ namespace Dibware.Web.Security.Providers.Contracts
             Boolean requireConfirmation, IDictionary<String, Object> values);
 
         /// <summary>
-        /// Gets the password salt for the user
+        /// Gets the hashed password for the specified username
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        String GetPasswordSalt(String username);
+        String GetHashedPassword(String username);
 
         /// <summary>
         /// Verifies that the specified user name and password exist in the data source.

@@ -14,7 +14,7 @@ namespace Dibware.Web.Security.Tests.Providers
     {
         #region Declarations
 
-        private Mock<IRepositoryMembershipProviderEncryptor> _membershipProviderEncryptor;
+        private Mock<IRepositoryMembershipProviderPasswordService> _membershipProviderPasswordService;
         private Mock<IRepositoryMembershipProviderRepository> _membershipProviderRepository;
 
         #endregion
@@ -25,13 +25,14 @@ namespace Dibware.Web.Security.Tests.Providers
         public void TestInit()
         {
             // Mock the encryptor
-            _membershipProviderEncryptor = new Mock<IRepositoryMembershipProviderEncryptor>();
-            
-            // .EncryptValue
-            _membershipProviderEncryptor
-                .Setup(e => e.EncryptValue(
-                    UserData.UserDave.Password))
-                .Returns(UserData.UserDave.EncryptedPassword);
+            _membershipProviderPasswordService = new Mock<IRepositoryMembershipProviderPasswordService>();
+
+            // .ValidatePassword
+            _membershipProviderPasswordService
+                .Setup(e => e.ValidatePassword(
+                    UserData.UserDave.Password,
+                    UserData.UserDave.HashedPassword))
+                .Returns(true);
 
             // Mock role repository
             _membershipProviderRepository = new Mock<IRepositoryMembershipProviderRepository>();
@@ -45,13 +46,19 @@ namespace Dibware.Web.Security.Tests.Providers
                     new Dictionary<String, Object>()))
                 .Returns(MembershipProviderData.Token);
 
+            // .GetHashedPassword
+            _membershipProviderRepository
+                .Setup(r => r.GetHashedPassword(
+                    UserData.UserDave.Username))
+                .Returns(UserData.UserDave.HashedPassword);
+
             // .ValidateUser
             _membershipProviderRepository
                 .Setup(r => r.ValidateUser(UserData.InvalidUser.Username, UserData.InvalidUser.Password))
                 .Returns(false);
 
             _membershipProviderRepository
-                .Setup(r => r.ValidateUser(UserData.UserDave.Username, UserData.UserDave.EncryptedPassword))
+                .Setup(r => r.ValidateUser(UserData.UserDave.Username, UserData.UserDave.HashedPassword))
                 .Returns(true);
         }
 
@@ -1023,7 +1030,7 @@ namespace Dibware.Web.Security.Tests.Providers
             const String password = UserData.UserDave.Password;
             var provider = new RepositoryMembershipProvider
             {
-                RepositoryMembershipProviderEncryptor =null,
+                RepositoryMembershipProviderPasswordService = null,
                 MembershipProviderRepository = null
             };
 
@@ -1042,7 +1049,7 @@ namespace Dibware.Web.Security.Tests.Providers
             const String password = UserData.UserDave.Password;
             var provider = new RepositoryMembershipProvider
             {
-                RepositoryMembershipProviderEncryptor = _membershipProviderEncryptor.Object,
+                RepositoryMembershipProviderPasswordService = _membershipProviderPasswordService.Object,
                 MembershipProviderRepository = _membershipProviderRepository.Object
             };
 
@@ -1062,7 +1069,7 @@ namespace Dibware.Web.Security.Tests.Providers
             const String password = UserData.InvalidUser.Password;
             var provider = new RepositoryMembershipProvider
             {
-                RepositoryMembershipProviderEncryptor = _membershipProviderEncryptor.Object,
+                RepositoryMembershipProviderPasswordService = _membershipProviderPasswordService.Object,
                 MembershipProviderRepository = _membershipProviderRepository.Object
             };
 
