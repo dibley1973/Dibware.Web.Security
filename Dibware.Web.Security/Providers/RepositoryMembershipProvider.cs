@@ -398,27 +398,23 @@ namespace Dibware.Web.Security.Providers
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderEncryptorIsNull);
             }
 
-            var encriptedPassword =RepositoryMembershipProviderEncryptor.EncryptValue(password);
+            // Try and get the salt for the user. 
+            var salt = MembershipProviderRepository.GetPasswordSalt(username);
+            
+            // If a 'salt' is NOT found ...
+            if(String.IsNullOrEmpty(salt))
+            {
+                // ...then validation has already failed
+                return false;
+            }
+
+            // So we have a salt, now lets get the encrypted password
+            var encriptedPassword = RepositoryMembershipProviderEncryptor.EncryptValue(password, salt);
+
+            // And finally validat the user against the encrypted password.
             return MembershipProviderRepository.ValidateUser(username, encriptedPassword);
         }
 
         #endregion
-
-        //#region Methods - Private
-
-        ///// <summary>
-        ///// Gets the encrypted version of the specified value
-        ///// </summary>
-        ///// <param name="value">The value to encrypt</param>
-        ///// <returns>The encrypted value.</returns>
-        //private String GetEncryptedValue(String value)
-        //{
-        //    byte[] data = System.Text.Encoding.ASCII.GetBytes(value);
-        //    var encryptedData = EncryptPassword(data);
-        //    var encriptedValue = encryptedData.ToString();
-        //    return encriptedValue;
-        //}
-
-        //#endregion
     }
 }
