@@ -9,6 +9,12 @@ namespace Dibware.Web.Security.Providers.Contracts
     public interface IRepositoryMembershipProviderPasswordService
     {
         /// <summary>
+        /// Creates the confirmation token.
+        /// </summary>
+        /// <returns></returns>
+        String CreateConfirmationToken();
+
+        /// <summary>
         /// Creates a salted PBKDF2 hash of the password.
         /// </summary>
         /// <param name="password">The password to hash.</param>

@@ -85,7 +85,7 @@ namespace Dibware.Web.Security.Providers
         /// A token that can be sent to the user to confirm the user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
+        public override string CreateUserAndAccount(String userName, String password, Boolean requireConfirmation, IDictionary<String, Object> values)
         {
             // Validate arguments
             if (MembershipProviderRepository == null)
@@ -97,6 +97,20 @@ namespace Dibware.Web.Security.Providers
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
             }
 
+            // Ensure the values dictionary is instanciated
+            if (values == null)
+            {
+                values = new Dictionary<String, Object>();
+            }
+
+            // If we require a confirmation email then get the token and add it 
+            // to the values dictionary
+            if (requireConfirmation)
+            {
+                var emailConfirmationToken = RepositoryMembershipProviderPasswordService.CreateConfirmationToken();
+                values.Add(DictionaryKeys.ConfirmationToken, emailConfirmationToken);
+            }
+            // Get the hashed value for the password
             var hashedPassword = RepositoryMembershipProviderPasswordService.CreateHash(password);
 
             return MembershipProviderRepository.CreateUserAndAccount(userName, hashedPassword, requireConfirmation, values);

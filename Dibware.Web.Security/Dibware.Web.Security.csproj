@@ -52,6 +52,11 @@
     <Compile Include="Providers\Contracts\IRepositoryMembershipProviderRepository.cs" />
     <Compile Include="Providers\RepositoryMembershipProvider.cs" />
     <Compile Include="Providers\RepositoryRoleProvider.cs" />
+    <Compile Include="Resources\DictionaryKeys.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DictionaryKeys.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -60,6 +65,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Resources\DictionaryKeys.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DictionaryKeys.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ExceptionMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
