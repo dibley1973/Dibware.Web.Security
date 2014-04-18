@@ -92,7 +92,14 @@ namespace Dibware.Web.Security.Providers
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
             }
-            return MembershipProviderRepository.CreateUserAndAccount(userName, password, requireConfirmation, values);
+            if (RepositoryMembershipProviderPasswordService == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
+            }
+
+            var hashedPassword = RepositoryMembershipProviderPasswordService.CreateHash(password);
+
+            return MembershipProviderRepository.CreateUserAndAccount(userName, hashedPassword, requireConfirmation, values);
         }
 
         /// <summary>
@@ -399,7 +406,7 @@ namespace Dibware.Web.Security.Providers
             }
 
             // Try and get the hashed password for the supplied username
-            var actualPasswordHash = MembershipProviderRepository.GetHashedPassword(username);
+            var actualPasswordHash = MembershipProviderRepository.GetHashedPasswordForUser(username);
 
             // If a hashed password for the username is NOT found ...
             if (String.IsNullOrEmpty(actualPasswordHash))

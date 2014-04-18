@@ -3,7 +3,11 @@ Dibware.Web.Security
 
 A C# .Net 4.5 assembly for use with ASP.Net MVC websites
 
-## A WORK IN PROGRESS!!!
+Membership and Role providers that accept an injected repository which must 
+confirm to a specified contract. This ensures the providers have no awareness 
+of where the data they use comes from.
+
+## This is very much A WORK IN PROGRESS!!!
 
 ## Prerequisite Assemblies
 * Ninject.dll
@@ -14,8 +18,11 @@ A C# .Net 4.5 assembly for use with ASP.Net MVC websites
 * WebMatrix.Webdata
 
 ## Interfaces
-* RepositoryMembershipProvider
-* RepositoryRoleProviderRepository
+* IRepositoryMembershipProvider
+* IRepositoryMembershipProviderPasswordService
+* IRepositoryMembershipProviderRepository
+* IRepositoryRoleProvider
+* IRepositoryRoleProviderRepository
 
 ## Classes
 * RepositoryMembershipProvider

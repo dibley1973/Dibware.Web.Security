@@ -46,20 +46,20 @@ namespace Dibware.Web.Security.Tests.Providers
                     new Dictionary<String, Object>()))
                 .Returns(MembershipProviderData.Token);
 
-            // .GetHashedPassword
+            // .GetHashedPasswordForUser
             _membershipProviderRepository
-                .Setup(r => r.GetHashedPassword(
+                .Setup(r => r.GetHashedPasswordForUser(
                     UserData.UserDave.Username))
                 .Returns(UserData.UserDave.HashedPassword);
 
-            // .ValidateUser
-            _membershipProviderRepository
-                .Setup(r => r.ValidateUser(UserData.InvalidUser.Username, UserData.InvalidUser.Password))
-                .Returns(false);
+            //// .ValidateUser
+            //_membershipProviderRepository
+            //    .Setup(r => r.ValidateUser(UserData.InvalidUser.Username, UserData.InvalidUser.Password))
+            //    .Returns(false);
 
-            _membershipProviderRepository
-                .Setup(r => r.ValidateUser(UserData.UserDave.Username, UserData.UserDave.HashedPassword))
-                .Returns(true);
+            //_membershipProviderRepository
+            //    .Setup(r => r.ValidateUser(UserData.UserDave.Username, UserData.UserDave.HashedPassword))
+            //    .Returns(true);
         }
 
         #endregion
@@ -166,10 +166,10 @@ namespace Dibware.Web.Security.Tests.Providers
             };
 
             // Act
-            var result = provider.CreateUserAndAccount(username, password, requireConfirmationToken, values);
+            var token = provider.CreateUserAndAccount(username, password, requireConfirmationToken, values);
 
             // Assert
-            Assert.AreEqual(MembershipProviderData.Token, result);
+            Assert.AreEqual(MembershipProviderData.Token, token);
         }
 
         #endregion
