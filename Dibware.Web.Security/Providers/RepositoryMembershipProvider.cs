@@ -411,24 +411,6 @@ namespace Dibware.Web.Security.Providers
             // So we got a hasshed password,
             var isValid = RepositoryMembershipProviderPasswordService.ValidatePassword(password, actualPasswordHash);
             return isValid;
-
-
-
-            //// Try and get the salt for the user. 
-            //var salt = MembershipProviderRepository.GetPasswordSalt(username);
-
-            //// If a 'salt' is NOT found ...
-            //if(String.IsNullOrEmpty(salt))
-            //{
-            //    // ...then validation has already failed
-            //    return false;
-            //}
-
-            //// So we have a salt, now lets get the encrypted password
-            //var encriptedPassword = RepositoryMembershipProviderPasswordService.EncryptValue(password, salt);
-
-            //// And finally validat the user against the encrypted password.
-            //return MembershipProviderRepository.ValidateUser(username, encriptedPassword);
         }
 
         #endregion
