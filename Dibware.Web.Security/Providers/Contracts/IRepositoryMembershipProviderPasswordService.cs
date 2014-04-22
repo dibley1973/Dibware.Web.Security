@@ -8,6 +8,20 @@ namespace Dibware.Web.Security.Providers.Contracts
     /// </summary>
     public interface IRepositoryMembershipProviderPasswordService
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the minimum password length
+        /// </summary>
+        Int32 MinRequiredPasswordLength { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minimum required non alphanumeric characters
+        /// </summary>
+        Int32 MinRequiredNonAlphanumericCharacters { get; set; }
+
+        #endregion
+
         /// <summary>
         /// Creates the confirmation token.
         /// </summary>

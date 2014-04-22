@@ -344,14 +344,22 @@ namespace Dibware.Web.Security.Providers
             get { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets or sets the minimum required non alphanumeric characters 
+        /// from the RepositoryMembershipProviderPasswordService
+        /// </summary>
         public override int MinRequiredNonAlphanumericCharacters
         {
-            get { throw new NotImplementedException(); }
+            get { return RepositoryMembershipProviderPasswordService.MinRequiredNonAlphanumericCharacters; }
         }
 
+        /// <summary>
+        /// Gets or sets the minimum password length from the 
+        /// RepositoryMembershipProviderPasswordService
+        /// </summary>
         public override int MinRequiredPasswordLength
         {
-            get { throw new NotImplementedException(); }
+            get { return RepositoryMembershipProviderPasswordService.MinRequiredPasswordLength; }
         }
 
         public override int PasswordAttemptWindow
