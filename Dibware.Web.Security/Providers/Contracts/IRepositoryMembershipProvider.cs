@@ -227,6 +227,9 @@ namespace Dibware.Web.Security.Providers.Contracts
 
         MembershipPasswordFormat PasswordFormat { get; }
 
+        /// <summary>
+        /// Gets the password strength regular expression
+        /// </summary>
         String PasswordStrengthRegularExpression { get; }
 
         Boolean RequiresQuestionAndAnswer { get; }

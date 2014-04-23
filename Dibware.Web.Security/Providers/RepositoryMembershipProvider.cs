@@ -350,7 +350,14 @@ namespace Dibware.Web.Security.Providers
         /// </summary>
         public override int MinRequiredNonAlphanumericCharacters
         {
-            get { return RepositoryMembershipProviderPasswordService.MinRequiredNonAlphanumericCharacters; }
+            get
+            {
+                if (RepositoryMembershipProviderPasswordService == null)
+                {
+                    throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
+                }
+                return RepositoryMembershipProviderPasswordService.MinRequiredNonAlphanumericCharacters;
+            }
         }
 
         /// <summary>
@@ -359,7 +366,14 @@ namespace Dibware.Web.Security.Providers
         /// </summary>
         public override int MinRequiredPasswordLength
         {
-            get { return RepositoryMembershipProviderPasswordService.MinRequiredPasswordLength; }
+            get
+            {
+                if (RepositoryMembershipProviderPasswordService == null)
+                {
+                    throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
+                }
+                return RepositoryMembershipProviderPasswordService.MinRequiredPasswordLength;
+            }
         }
 
         public override int PasswordAttemptWindow
@@ -372,9 +386,19 @@ namespace Dibware.Web.Security.Providers
             get { throw new NotImplementedException(); }
         }
 
+        /// <summary>
+        /// Gets the password strength regular expression
+        /// </summary>
         public override string PasswordStrengthRegularExpression
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                if (MembershipProviderRepository == null)
+                {
+                    throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+                }
+                return MembershipProviderRepository.GetPasswordStrengthRegularExpression();
+            }
         }
 
         public override bool RequiresQuestionAndAnswer

@@ -11,14 +11,19 @@ namespace Dibware.Web.Security.Providers.Contracts
         #region Properties
 
         /// <summary>
-        /// Gets or sets the minimum password length
+        /// Gets the minimum password length
         /// </summary>
-        Int32 MinRequiredPasswordLength { get; set; }
+        Int32 MinRequiredPasswordLength { get; }
 
         /// <summary>
-        /// Gets or sets the minimum required non alphanumeric characters
+        /// Gets the minimum required non alphanumeric characters
         /// </summary>
-        Int32 MinRequiredNonAlphanumericCharacters { get; set; }
+        Int32 MinRequiredNonAlphanumericCharacters { get; }
+
+        /// <summary>
+        /// Gets the regular expression for the password strength
+        /// </summary>
+        String PasswordStrengthRegularExpression { get; }
 
         #endregion
 

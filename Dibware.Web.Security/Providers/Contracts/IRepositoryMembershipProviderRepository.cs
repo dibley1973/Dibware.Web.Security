@@ -29,6 +29,11 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// <returns></returns>
         String GetHashedPasswordForUser(String username);
 
+        /// <summary>
+        /// Gets the password strength regular expression
+        /// </summary>
+        String GetPasswordStrengthRegularExpression();
+
         ///// <summary>
         ///// Verifies that the specified user name and password exist in the data source.
         ///// </summary>
