@@ -393,11 +393,11 @@ namespace Dibware.Web.Security.Providers
         {
             get
             {
-                if (MembershipProviderRepository == null)
+                if (RepositoryMembershipProviderPasswordService == null)
                 {
-                    throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+                    throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
                 }
-                return MembershipProviderRepository.GetPasswordStrengthRegularExpression();
+                return RepositoryMembershipProviderPasswordService.PasswordStrengthRegularExpression;
             }
         }
 

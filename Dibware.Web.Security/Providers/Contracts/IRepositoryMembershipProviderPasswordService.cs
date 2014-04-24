@@ -27,6 +27,8 @@ namespace Dibware.Web.Security.Providers.Contracts
 
         #endregion
 
+        #region Methods
+
         /// <summary>
         /// Creates the confirmation token.
         /// </summary>
@@ -47,5 +49,7 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// <param name="correctHash">A hash of the correct password.</param>
         /// <returns><c>true</c> if the password is correct; otherwise <c>false</c>.</returns>
         Boolean ValidatePassword(String password, String correctHash);
+
+        #endregion
     }
 }
