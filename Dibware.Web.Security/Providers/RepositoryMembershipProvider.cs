@@ -40,9 +40,14 @@ namespace Dibware.Web.Security.Providers
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ConfirmAccount(string accountConfirmationToken)
+        public override bool ConfirmAccount(String accountConfirmationToken)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            return MembershipProviderRepository.ConfirmAccount(accountConfirmationToken);
         }
 
         /// <summary>
@@ -54,9 +59,14 @@ namespace Dibware.Web.Security.Providers
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ConfirmAccount(string userName, string accountConfirmationToken)
+        public override bool ConfirmAccount(String userName, String accountConfirmationToken)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            return MembershipProviderRepository.ConfirmAccount(userName, accountConfirmationToken);
         }
 
         /// <summary>
@@ -229,9 +239,14 @@ namespace Dibware.Web.Security.Providers
         /// true if the user is confirmed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool IsConfirmed(string userName)
+        public override bool IsConfirmed(String userName)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            return MembershipProviderRepository.IsConfirmed(userName);
         }
 
         /// <summary>

@@ -9,6 +9,27 @@ namespace Dibware.Web.Security.Providers.Contracts
     public interface IRepositoryMembershipProviderRepository
     {
         /// <summary>
+        /// Activates a pending membership account.
+        /// </summary>
+        /// <param name="accountConfirmationToken">A confirmation token to pass to the authentication provider.</param>
+        /// <returns>
+        /// true if the account is confirmed; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        Boolean ConfirmAccount(String accountConfirmationToken);
+
+        /// <summary>
+        /// Activates a pending membership account for the specified user.
+        /// </summary>
+        /// <param name="userName">The user name.</param>
+        /// <param name="accountConfirmationToken">A confirmation token to pass to the authentication provider.</param>
+        /// <returns>
+        /// true if the account is confirmed; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        Boolean ConfirmAccount(String userName, String accountConfirmationToken);
+
+        /// <summary>
         /// When overridden in a derived class, creates a new user profile and a new membership account.
         /// </summary>
         /// <param name="userName">The user name.</param>
@@ -33,6 +54,16 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// Gets the password strength regular expression
         /// </summary>
         String GetPasswordStrengthRegularExpression();
+
+        /// <summary>
+        /// Returns a value that indicates whether the user account has been confirmed by the provider.
+        /// </summary>
+        /// <param name="userName">The user name.</param>
+        /// <returns>
+        /// true if the user is confirmed; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        Boolean IsConfirmed(String userName);
 
         ///// <summary>
         ///// Verifies that the specified user name and password exist in the data source.
