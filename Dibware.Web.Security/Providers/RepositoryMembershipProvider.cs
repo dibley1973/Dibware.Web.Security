@@ -329,7 +329,7 @@ namespace Dibware.Web.Security.Providers
         /// </returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string GetPassword(string username, string answer)
+        public override string GetPassword(String username, String answer)
         {
             // Validate arguments
             if (MembershipProviderRepository == null)
@@ -339,9 +339,32 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
-        public override MembershipUser GetUser(string username, bool userIsOnline)
+        /// <summary>
+        /// Gets information from the data source for a user. Provides an option to update the last-activity date/time stamp for the user.
+        /// </summary>
+        /// <param name="username">The name of the user to get information for.</param>
+        /// <param name="userIsOnline">true to update the last-activity date/time stamp for the user; false to return user information without updating the last-activity date/time stamp for the user.</param>
+        /// <returns>
+        /// A <see cref="T:System.Web.Security.MembershipUser" /> object populated with the specified user's information from the data source.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override MembershipUser GetUser(String username, Boolean userIsOnline)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+
+            if (string.IsNullOrEmpty(username))
+            {
+                // No user signed in
+                return null;
+            }
+
+            var user = MembershipProviderRepository.GetUser(username, userIsOnline);
+            return user;
         }
 
         public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
@@ -466,18 +489,33 @@ namespace Dibware.Web.Security.Providers
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
             }
 
-            // Try and get the hashed password for the supplied username
+            // Try and get the hashed password for the supplied username,
+            // and set a flag to indicate it was found...
             var actualPasswordHash = MembershipProviderRepository.GetHashedPasswordForUser(username);
+            Boolean isValid = String.IsNullOrEmpty(actualPasswordHash);
 
-            // If a hashed password for the username is NOT found ...
-            if (String.IsNullOrEmpty(actualPasswordHash))
+            // Are we still valid...
+            if (isValid)
             {
-                // ...then validation has already failed
-                return false;
+                // ... we are, so check the hashed password against the
+                // hash for the specified password.
+                isValid = RepositoryMembershipProviderPasswordService
+                    .ValidatePassword(password, actualPasswordHash);
             }
 
-            // So we got a hasshed password,
-            var isValid = RepositoryMembershipProviderPasswordService.ValidatePassword(password, actualPasswordHash);
+            // Are we still valid...
+            if (isValid)
+            {
+                // ... we are, so update the SUCCESS state for the password
+                MembershipProviderRepository.UpdatePasswordSuccessState(username);
+            }
+            else
+            {
+                // ... we are not, so update the FAILURE state for the password
+                MembershipProviderRepository.UpdatePasswordFailureState(username);
+            }
+
+            // Finally return the valid state
             return isValid;
         }
 

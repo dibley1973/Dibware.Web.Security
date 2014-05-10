@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dibware.Web.Security.Membership;
+using System;
 using System.Collections.Generic;
 
 namespace Dibware.Web.Security.Providers.Contracts
@@ -56,6 +57,14 @@ namespace Dibware.Web.Security.Providers.Contracts
         String GetPasswordStrengthRegularExpression();
 
         /// <summary>
+        /// Gets the user for the specified user.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="userIsOnline">if set to <c>true</c> [user is online].</param>
+        /// <returns></returns>
+        WebMembershipUser GetUser(string username, bool userIsOnline);
+
+        /// <summary>
         /// Returns a value that indicates whether the user account has been confirmed by the provider.
         /// </summary>
         /// <param name="userName">The user name.</param>
@@ -76,5 +85,17 @@ namespace Dibware.Web.Security.Providers.Contracts
         ///// <exception cref="System.InvalidOperationException"></exception>
         ///// <exception cref="System.NotImplementedException"></exception>
         //Boolean ValidateUser(String username, String password);
+
+        /// <summary>
+        /// Updates the state of the password success.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        void UpdatePasswordSuccessState(String username);
+
+        /// <summary>
+        /// Updates the state of the password failure.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        void UpdatePasswordFailureState(String username);
     }
 }
