@@ -52,6 +52,36 @@ namespace Dibware.Web.Security.Providers.Contracts
         String GetHashedPasswordForUser(String username);
 
         /// <summary>
+        /// When overridden in a derived class, returns the date and time when an incorrect password was most recently entered for the specified user account.
+        /// </summary>
+        /// <param name="userName">The user name of the account.</param>
+        /// <returns>
+        /// The date and time when an incorrect password was most recently entered for this user account, or <see cref="F:System.DateTime.MinValue" /> if an incorrect password has not been entered for this user account.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        DateTime GetLastPasswordFailureDate(String userName);
+
+        /// <summary>
+        /// When overridden in a derived class, returns the date and time when the password was most recently changed for the specified membership account.
+        /// </summary>
+        /// <param name="userName">The user name of the account.</param>
+        /// <returns>
+        /// The date and time when the password was more recently changed for membership account, or <see cref="F:System.DateTime.MinValue" /> if the password has never been changed for this user account.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        DateTime GetPasswordChangedDate(String userName);
+
+        /// <summary>
+        /// When overridden in a derived class, returns the number of times that the password for the specified user account was incorrectly entered since the most recent successful login or since the user account was created.
+        /// </summary>
+        /// <param name="userName">The user name of the account.</param>
+        /// <returns>
+        /// The count of failed password attempts for the specified user account.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        Int32 GetPasswordFailuresSinceLastSuccess(String userName);
+
+        /// <summary>
         /// Gets the password strength regular expression
         /// </summary>
         String GetPasswordStrengthRegularExpression();

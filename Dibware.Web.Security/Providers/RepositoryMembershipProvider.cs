@@ -88,7 +88,7 @@ namespace Dibware.Web.Security.Providers
         /// A token that can be sent to the user to confirm the account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string CreateAccount(string userName, string password, bool requireConfirmationToken)
+        public override String CreateAccount(String userName, String password, bool requireConfirmationToken)
         {
             throw new NotImplementedException();
         }
@@ -104,7 +104,7 @@ namespace Dibware.Web.Security.Providers
         /// A token that can be sent to the user to confirm the user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string CreateUserAndAccount(String userName, String password, Boolean requireConfirmation, IDictionary<String, Object> values)
+        public override String CreateUserAndAccount(String userName, String password, Boolean requireConfirmation, IDictionary<String, Object> values)
         {
             // Validate arguments
             if (MembershipProviderRepository == null)
@@ -143,7 +143,7 @@ namespace Dibware.Web.Security.Providers
         /// true if the user account was deleted; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool DeleteAccount(string userName)
+        public override bool DeleteAccount(String userName)
         {
             throw new NotImplementedException();
         }
@@ -157,7 +157,7 @@ namespace Dibware.Web.Security.Providers
         /// A token to send to the user.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow)
+        public override String GeneratePasswordResetToken(String userName, Int32 tokenExpirationInMinutesFromNow)
         {
             throw new NotImplementedException();
         }
@@ -170,7 +170,7 @@ namespace Dibware.Web.Security.Providers
         /// A list of all OAuth membership accounts associated with the specified user name.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override ICollection<OAuthAccountData> GetAccountsForUser(string userName)
+        public override ICollection<OAuthAccountData> GetAccountsForUser(String userName)
         {
             throw new NotImplementedException();
         }
@@ -183,7 +183,7 @@ namespace Dibware.Web.Security.Providers
         /// The date and time the account was created, or <see cref="F:System.DateTime.MinValue" /> if the account creation date is not available.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override DateTime GetCreateDate(string userName)
+        public override DateTime GetCreateDate(String userName)
         {
             throw new NotImplementedException();
         }
@@ -196,9 +196,14 @@ namespace Dibware.Web.Security.Providers
         /// The date and time when an incorrect password was most recently entered for this user account, or <see cref="F:System.DateTime.MinValue" /> if an incorrect password has not been entered for this user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override DateTime GetLastPasswordFailureDate(string userName)
+        public override DateTime GetLastPasswordFailureDate(String userName)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            return MembershipProviderRepository.GetLastPasswordFailureDate(userName);
         }
 
         /// <summary>
@@ -209,9 +214,14 @@ namespace Dibware.Web.Security.Providers
         /// The date and time when the password was more recently changed for membership account, or <see cref="F:System.DateTime.MinValue" /> if the password has never been changed for this user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override DateTime GetPasswordChangedDate(string userName)
+        public override DateTime GetPasswordChangedDate(String userName)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            return MembershipProviderRepository.GetPasswordChangedDate(userName);
         }
 
         /// <summary>
@@ -222,9 +232,14 @@ namespace Dibware.Web.Security.Providers
         /// The count of failed password attempts for the specified user account.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override int GetPasswordFailuresSinceLastSuccess(string userName)
+        public override Int32 GetPasswordFailuresSinceLastSuccess(String userName)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            return MembershipProviderRepository.GetPasswordFailuresSinceLastSuccess(userName);
         }
 
         /// <summary>
@@ -235,7 +250,7 @@ namespace Dibware.Web.Security.Providers
         /// The user ID.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override int GetUserIdFromPasswordResetToken(string token)
+        public override Int32 GetUserIdFromPasswordResetToken(String token)
         {
             throw new NotImplementedException();
         }
@@ -267,7 +282,7 @@ namespace Dibware.Web.Security.Providers
         /// true if the password was changed; otherwise, false.
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ResetPasswordWithToken(string token, string newPassword)
+        public override bool ResetPasswordWithToken(String token, String newPassword)
         {
             throw new NotImplementedException();
         }
@@ -276,24 +291,24 @@ namespace Dibware.Web.Security.Providers
         /// The name of the application using the custom membership provider.
         /// </summary>
         /// <returns>The name of the application using the custom membership provider.</returns>
-        public override string ApplicationName { get; set; }
+        public override String ApplicationName { get; set; }
 
-        public override bool ChangePassword(string username, string oldPassword, string newPassword)
+        public override bool ChangePassword(String username, String oldPassword, String newPassword)
         {
             throw new NotImplementedException();
         }
 
-        public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
+        public override bool ChangePasswordQuestionAndAnswer(String username, String password, String newPasswordQuestion, String newPasswordAnswer)
         {
             throw new NotImplementedException();
         }
 
-        public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+        public override MembershipUser CreateUser(String username, String password, String email, String passwordQuestion, String passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
         {
             throw new NotImplementedException();
         }
 
-        public override bool DeleteUser(string username, bool deleteAllRelatedData)
+        public override bool DeleteUser(String username, bool deleteAllRelatedData)
         {
             throw new NotImplementedException();
         }
@@ -324,22 +339,22 @@ namespace Dibware.Web.Security.Providers
             get { return false; }
         }
 
-        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
+        public override MembershipUserCollection FindUsersByEmail(String emailToMatch, Int32 pageIndex, Int32 pageSize, out Int32 totalRecords)
         {
             throw new NotImplementedException();
         }
 
-        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+        public override MembershipUserCollection FindUsersByName(String usernameToMatch, Int32 pageIndex, Int32 pageSize, out Int32 totalRecords)
         {
             throw new NotImplementedException();
         }
 
-        public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
+        public override MembershipUserCollection GetAllUsers(int pageIndex, Int32 pageSize, out Int32 totalRecords)
         {
             throw new NotImplementedException();
         }
 
-        public override int GetNumberOfUsersOnline()
+        public override Int32 GetNumberOfUsersOnline()
         {
             throw new NotImplementedException();
         }
@@ -354,7 +369,7 @@ namespace Dibware.Web.Security.Providers
         /// </returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override string GetPassword(String username, String answer)
+        public override String GetPassword(String username, String answer)
         {
             // Validate arguments
             if (MembershipProviderRepository == null)
@@ -382,7 +397,7 @@ namespace Dibware.Web.Security.Providers
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
             }
 
-            if (string.IsNullOrEmpty(username))
+            if (String.IsNullOrEmpty(username))
             {
                 // No user signed in
                 return null;
@@ -397,12 +412,12 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
-        public override string GetUserNameByEmail(string email)
+        public override String GetUserNameByEmail(String email)
         {
             throw new NotImplementedException();
         }
 
-        public override int MaxInvalidPasswordAttempts
+        public override Int32 MaxInvalidPasswordAttempts
         {
             get { throw new NotImplementedException(); }
         }
@@ -411,7 +426,7 @@ namespace Dibware.Web.Security.Providers
         /// Gets or sets the minimum required non alphanumeric characters 
         /// from the RepositoryMembershipProviderPasswordService
         /// </summary>
-        public override int MinRequiredNonAlphanumericCharacters
+        public override Int32 MinRequiredNonAlphanumericCharacters
         {
             get
             {
@@ -427,7 +442,7 @@ namespace Dibware.Web.Security.Providers
         /// Gets or sets the minimum password length from the 
         /// RepositoryMembershipProviderPasswordService
         /// </summary>
-        public override int MinRequiredPasswordLength
+        public override Int32 MinRequiredPasswordLength
         {
             get
             {
@@ -439,7 +454,7 @@ namespace Dibware.Web.Security.Providers
             }
         }
 
-        public override int PasswordAttemptWindow
+        public override Int32 PasswordAttemptWindow
         {
             get { throw new NotImplementedException(); }
         }
@@ -452,7 +467,7 @@ namespace Dibware.Web.Security.Providers
         /// <summary>
         /// Gets the password strength regular expression
         /// </summary>
-        public override string PasswordStrengthRegularExpression
+        public override String PasswordStrengthRegularExpression
         {
             get
             {
@@ -474,12 +489,12 @@ namespace Dibware.Web.Security.Providers
             get { throw new NotImplementedException(); }
         }
 
-        public override string ResetPassword(string username, string answer)
+        public override String ResetPassword(String username, String answer)
         {
             throw new NotImplementedException();
         }
 
-        public override bool UnlockUser(string userName)
+        public override bool UnlockUser(String userName)
         {
             throw new NotImplementedException();
         }
@@ -502,7 +517,7 @@ namespace Dibware.Web.Security.Providers
         /// RepositoryMembershipProviderEncryptor is null.
         /// </exception>
         /// <exception cref="System.NotImplementedException"></exception>
-        public override bool ValidateUser(string username, string password)
+        public override bool ValidateUser(String username, String password)
         {
             // Validate Properties have been set
             if (MembershipProviderRepository == null)
