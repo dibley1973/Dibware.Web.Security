@@ -209,6 +209,12 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// <exception cref="System.NotImplementedException"></exception>
         String GetPassword(String username, String answer);
 
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="userIsOnline">if set to <c>true</c> [user is online].</param>
+        /// <returns></returns>
         MembershipUser GetUser(String username, Boolean userIsOnline);
 
         MembershipUser GetUser(object providerUserKey, Boolean userIsOnline);

@@ -196,6 +196,46 @@ namespace Dibware.Web.Security.Tests.Providers
 
         #endregion
 
+        #region EnablePasswordReset
+
+        [TestMethod]
+        public void Test_EnablePasswordReset_ReturnsTrue()
+        {
+            // Arrange
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.EnablePasswordReset;
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        #endregion
+
+        #region EnablePasswordRetrieval
+
+        [TestMethod]
+        public void Test_EnablePasswordRetrieval_ReturnsTrue()
+        {
+            // Arrange
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.EnablePasswordRetrieval;
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        #endregion
+
         #region GeneratePasswordResetToken
 
         [TestMethod]

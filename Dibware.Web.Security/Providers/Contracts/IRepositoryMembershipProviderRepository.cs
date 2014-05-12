@@ -62,7 +62,9 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// <param name="username">The username.</param>
         /// <param name="userIsOnline">if set to <c>true</c> [user is online].</param>
         /// <returns></returns>
-        WebMembershipUser GetUser(string username, bool userIsOnline);
+        WebMembershipUser GetUser(String providername, String username, Boolean userIsOnline);
+
+        WebMembershipUser GetUser(String providername, object providerUserKey, Boolean userIsOnline);
 
         /// <summary>
         /// Returns a value that indicates whether the user account has been confirmed by the provider.

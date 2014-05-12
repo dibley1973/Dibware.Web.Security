@@ -9,11 +9,20 @@ using WebMatrix.WebData;
 
 namespace Dibware.Web.Security.Providers
 {
+    // Ref:
+    //  https://github.com/jcwmoore/athena/blob/master/Athena.Mvc/MembershipProvider.cs
+
     /// <summary>
     /// Represents a MembershipProvider that uses a repository as a data store
     /// </summary>
     public class RepositoryMembershipProvider : ExtendedMembershipProvider, IRepositoryMembershipProvider
     {
+        #region Declarations
+
+        private const String ProviderName = "RepositoryMembershipProvider";
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -289,14 +298,30 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Indicates whether the membership provider is configured to allow 
+        /// users to reset their passwords.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if the membership provider supports password reset; 
+        /// otherwise, <c>false</c>. The default is <c>true</c>.
+        /// </returns>
         public override bool EnablePasswordReset
         {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
+        /// <summary>
+        /// Indicates whether the membership provider is configured to allow 
+        /// users to retrieve their passwords.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if the membership provider is configured to support 
+        /// password retrieval; otherwise, <c>false</c>. The default is <c>false</c>.
+        /// </returns>
         public override bool EnablePasswordRetrieval
         {
-            get { throw new NotImplementedException(); }
+            get { return false; }
         }
 
         public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
@@ -363,7 +388,7 @@ namespace Dibware.Web.Security.Providers
                 return null;
             }
 
-            var user = MembershipProviderRepository.GetUser(username, userIsOnline);
+            var user = MembershipProviderRepository.GetUser(ProviderName, username, userIsOnline);
             return user;
         }
 
