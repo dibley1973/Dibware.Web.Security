@@ -532,7 +532,7 @@ namespace Dibware.Web.Security.Providers
             // Try and get the hashed password for the supplied username,
             // and set a flag to indicate it was found...
             var actualPasswordHash = MembershipProviderRepository.GetHashedPasswordForUser(username);
-            Boolean isValid = String.IsNullOrEmpty(actualPasswordHash);
+            Boolean isValid = !String.IsNullOrEmpty(actualPasswordHash);
 
             // Are we still valid...
             if (isValid)
