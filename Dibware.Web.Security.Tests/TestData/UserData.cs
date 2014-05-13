@@ -8,7 +8,7 @@ namespace Dibware.Web.Security.Tests.TestData
         {
             public const String Username = "Sponklefield";
             public const String Password = "anaplaster";
-
+            public const string AccountConfirmationToken= @"dfhsireu";
         }
         internal class UserDave
         {

@@ -34,8 +34,25 @@ namespace Dibware.Web.Security.Tests.Providers
                     UserData.UserDave.HashedPassword))
                 .Returns(true);
 
+            // CreateConfirmationToken
+            _membershipProviderPasswordService
+                .Setup(e => e.CreateConfirmationToken())
+                .Returns(MembershipProviderData.Token);
+
             // Mock role repository
             _membershipProviderRepository = new Mock<IRepositoryMembershipProviderRepository>();
+
+            // ConfirmAccount
+            _membershipProviderRepository
+                .Setup(e => e.ConfirmAccount(
+                    UserData.UserDave.Username,
+                    UserData.UserDave.AccountConfirmationToken))
+                .Returns(true);
+            _membershipProviderRepository
+                .Setup(e => e.ConfirmAccount(
+                    UserData.InvalidUser.Username,
+                    UserData.InvalidUser.AccountConfirmationToken))
+                .Returns(false);
 
             // .CreateUserAndAccount
             _membershipProviderRepository
@@ -51,6 +68,12 @@ namespace Dibware.Web.Security.Tests.Providers
                 .Setup(r => r.GetHashedPasswordForUser(
                     UserData.UserDave.Username))
                 .Returns(UserData.UserDave.HashedPassword);
+
+            // GetPasswordChangedDate
+            _membershipProviderRepository
+                .Setup(r => r.GetPasswordChangedDate(
+                    UserData.UserJane.Username))
+                .Returns(UserData.UserJane.PasswordChangedDate);
 
             // GetPasswordFailuresSinceLastSuccess
             _membershipProviderRepository
@@ -90,7 +113,7 @@ namespace Dibware.Web.Security.Tests.Providers
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Test_ConfirmAccountWithNullRepository_ThrowsInvalidOperationException()
+        public void Test_ConfirmAccountWithNullRepositoryAndJustToken_ThrowsInvalidOperationException()
         {
             // Arrange
             const String accountConfirmationToken = UserData.UserDave.AccountConfirmationToken;
@@ -108,7 +131,7 @@ namespace Dibware.Web.Security.Tests.Providers
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Test_ConfirmAccountUsingNameWithNullRepository_ThrowsInvalidOperationException()
+        public void Test_ConfirmAccountUsingNameWithNullRepositoryAndNameAndToken_ThrowsInvalidOperationException()
         {
             // Arrange
             const String accountConfirmationToken = UserData.UserDave.AccountConfirmationToken;
@@ -123,6 +146,42 @@ namespace Dibware.Web.Security.Tests.Providers
 
             // Assert
             // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_ConfirmAccountUsingNameWithValidRepositoryAndValidNameAndToken_ReturnsTrue()
+        {
+            // Arrange
+            const String accountConfirmationToken = UserData.UserDave.AccountConfirmationToken;
+            const String username = UserData.UserDave.Username;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.ConfirmAccount(username, accountConfirmationToken);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void Test_ConfirmAccountUsingNameWithValidRepositoryAndInvalidNameAndToken_ReturnsFalse()
+        {
+            // Arrange
+            const String accountConfirmationToken = UserData.InvalidUser.AccountConfirmationToken;
+            const String username = UserData.InvalidUser.Username;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.ConfirmAccount(username, accountConfirmationToken);
+
+            // Assert
+            Assert.IsFalse(result);
         }
 
         #endregion
@@ -175,7 +234,8 @@ namespace Dibware.Web.Security.Tests.Providers
         }
 
         [TestMethod]
-        public void Test_CreateUserAndAccountUsingNameWithValidRepository_ReturnsToken()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_CreateUserAndAccountUsingNameWithNullRepositoryAndPasswordService_ThrowsInvalidOperationException()
         {
             // Arrange
             const String password = UserData.UserDave.Password;
@@ -184,7 +244,29 @@ namespace Dibware.Web.Security.Tests.Providers
             IDictionary<string, object> values = new Dictionary<string, object>();
             var provider = new RepositoryMembershipProvider
             {
-                MembershipProviderRepository = _membershipProviderRepository.Object
+                MembershipProviderRepository = null,
+                RepositoryMembershipProviderPasswordService = null
+            };
+
+            // Act
+            var result = provider.CreateUserAndAccount(username, password, requireConfirmationToken, values);
+
+            // Assert
+            // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_CreateUserAndAccountUsingNameWithValidRepository_ReturnsToken()
+        {
+            // Arrange
+            const String password = UserData.UserDave.Password;
+            const String username = UserData.UserDave.Username;
+            const Boolean requireConfirmationToken = true;
+            IDictionary<String, Object> values = new Dictionary<String, Object>();
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object,
+                RepositoryMembershipProviderPasswordService = _membershipProviderPasswordService.Object
             };
 
             // Act
@@ -386,7 +468,6 @@ namespace Dibware.Web.Security.Tests.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Test_GetPasswordChangedDateWithValidRepository_ReturnsCorrectDate()
         {
             // Arrange
@@ -394,7 +475,7 @@ namespace Dibware.Web.Security.Tests.Providers
             var expectedResult = UserData.UserJane.PasswordChangedDate;
             var provider = new RepositoryMembershipProvider
             {
-                MembershipProviderRepository = null
+                MembershipProviderRepository = _membershipProviderRepository.Object
             };
 
             // Act
@@ -854,8 +935,8 @@ namespace Dibware.Web.Security.Tests.Providers
         #region GetUser
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_GetUserUsingUsernameWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_GetUserUsingUsernameWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String username = UserData.UserDave.Username;
@@ -869,6 +950,22 @@ namespace Dibware.Web.Security.Tests.Providers
 
             // Assert
             // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_GetUserUsingUsernameWithNullUsername_ReturnsNull()
+        {
+            // Arrange
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.GetUser(null, true);
+
+            // Assert
+            Assert.IsNull(result);
         }
 
         [TestMethod]
