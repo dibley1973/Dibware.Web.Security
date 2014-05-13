@@ -52,7 +52,29 @@ namespace Dibware.Web.Security.Tests.Providers
                     UserData.UserDave.Username))
                 .Returns(UserData.UserDave.HashedPassword);
 
-            //// .ValidateUser
+            // GetPasswordFailuresSinceLastSuccess
+            _membershipProviderRepository
+                .Setup(r => r.GetPasswordFailuresSinceLastSuccess(
+                    UserData.UserJane.Username))
+                .Returns(UserData.UserJane.PasswordFailuresSinceLastSuccess);
+
+            // GetLastPasswordFailureDate
+            _membershipProviderRepository
+                .Setup(r => r.GetLastPasswordFailureDate(
+                    UserData.UserJane.Username))
+                .Returns(UserData.UserJane.LastPasswordFailureDate);
+
+            // .IsConfirmed
+            _membershipProviderRepository
+                .Setup(r => r.IsConfirmed(UserData.UserDave.Username))
+                .Returns(true);
+
+            // .IsConfirmed
+            _membershipProviderRepository
+                .Setup(r => r.IsConfirmed(UserData.InvalidUser.Username))
+                .Returns(false);
+
+            // .ValidateUser
             //_membershipProviderRepository
             //    .Setup(r => r.ValidateUser(UserData.InvalidUser.Username, UserData.InvalidUser.Password))
             //    .Returns(false);
@@ -67,8 +89,8 @@ namespace Dibware.Web.Security.Tests.Providers
         #region ConfirmAccount
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_ConfirmAccountWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_ConfirmAccountWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String accountConfirmationToken = UserData.UserDave.AccountConfirmationToken;
@@ -85,8 +107,8 @@ namespace Dibware.Web.Security.Tests.Providers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_ConfirmAccountUsingNameWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_ConfirmAccountUsingNameWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String accountConfirmationToken = UserData.UserDave.AccountConfirmationToken;
@@ -306,8 +328,8 @@ namespace Dibware.Web.Security.Tests.Providers
         #region GetLastPasswordFailureDate
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_GetLastPasswordFailureDateWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_GetLastPasswordFailureDateWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String username = UserData.UserDave.Username;
@@ -323,13 +345,31 @@ namespace Dibware.Web.Security.Tests.Providers
             // Exception should be thrown
         }
 
+        [TestMethod]
+        public void Test_GetLastPasswordFailureDateWithValidRepository_ReturnsCorrectDate()
+        {
+            // Arrange
+            const String username = UserData.UserJane.Username;
+            var expectedResult = UserData.UserJane.LastPasswordFailureDate;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.GetLastPasswordFailureDate(username);
+
+            // Assert
+            Assert.AreEqual(expectedResult, result);
+        }
+
         #endregion
 
         #region GetPasswordChangedDate
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_GetPasswordChangedDateWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_GetPasswordChangedDateWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String username = UserData.UserDave.Username;
@@ -345,13 +385,32 @@ namespace Dibware.Web.Security.Tests.Providers
             // Exception should be thrown
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_GetPasswordChangedDateWithValidRepository_ReturnsCorrectDate()
+        {
+            // Arrange
+            const String username = UserData.UserJane.Username;
+            var expectedResult = UserData.UserJane.PasswordChangedDate;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = null
+            };
+
+            // Act
+            var result = provider.GetPasswordChangedDate(username);
+
+            // Assert
+            Assert.AreEqual(expectedResult, result);
+        }
+
         #endregion
 
         #region GetPasswordFailuresSinceLastSuccess
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_GetPasswordFailuresSinceLastSuccesseWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_GetPasswordFailuresSinceLastSuccesseWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String username = UserData.UserDave.Username;
@@ -365,6 +424,24 @@ namespace Dibware.Web.Security.Tests.Providers
 
             // Assert
             // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_GetPasswordFailuresSinceLastSuccesseWithValidRepository_ReturnsCorrectAccount()
+        {
+            // Arrange
+            const String username = UserData.UserJane.Username;
+            const Int32 expectedResult = UserData.UserJane.PasswordFailuresSinceLastSuccess;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.GetPasswordFailuresSinceLastSuccess(username);
+
+            // Assert
+            Assert.AreEqual(expectedResult, result);
         }
 
         #endregion
@@ -394,8 +471,8 @@ namespace Dibware.Web.Security.Tests.Providers
         #region IsConfirmed
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_IsConfirmedWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_IsConfirmedWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             const String username = UserData.UserDave.Username;
@@ -409,6 +486,40 @@ namespace Dibware.Web.Security.Tests.Providers
 
             // Assert
             // Exception should be thrown
+        }
+
+        [TestMethod]
+        public void Test_IsConfirmedWithValidRepository_ReturnsTrueForValidUser()
+        {
+            // Arrange
+            const String username = UserData.UserDave.Username;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.IsConfirmed(username);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void Test_IsConfirmedWithValidRepository_ReturnsFalseForInvalidUser()
+        {
+            // Arrange
+            const String username = UserData.InvalidUser.Username;
+            var provider = new RepositoryMembershipProvider
+            {
+                MembershipProviderRepository = _membershipProviderRepository.Object
+            };
+
+            // Act
+            var result = provider.IsConfirmed(username);
+
+            // Assert
+            Assert.IsFalse(result);
         }
 
         #endregion
@@ -564,20 +675,19 @@ namespace Dibware.Web.Security.Tests.Providers
         #region EnablePasswordReset
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_EnablePasswordResetWithNullRepository_ThrowsNotImplementedException()
+        public void Test_EnablePasswordResetWithValidRepository_ReturnsFalse()
         {
             // Arrange
             var provider = new RepositoryMembershipProvider
             {
-                MembershipProviderRepository = null
+                MembershipProviderRepository = _membershipProviderRepository.Object
             };
 
             // Act
             var result = provider.EnablePasswordReset;
 
             // Assert
-            // Exception should be thrown
+            Assert.IsTrue(result);
         }
 
         #endregion
@@ -585,8 +695,7 @@ namespace Dibware.Web.Security.Tests.Providers
         #region EnablePasswordRetrieval
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_EnablePasswordRetrievalWithNullRepository_ThrowsNotImplementedException()
+        public void Test_EnablePasswordRetrievalWithValidRepository_ReturnsFalse()
         {
             // Arrange
             var provider = new RepositoryMembershipProvider
@@ -598,7 +707,7 @@ namespace Dibware.Web.Security.Tests.Providers
             var result = provider.EnablePasswordRetrieval;
 
             // Assert
-            // Exception should be thrown
+            Assert.IsFalse(result);
         }
 
         #endregion
@@ -829,8 +938,8 @@ namespace Dibware.Web.Security.Tests.Providers
         #region MinRequiredNonAlphanumericCharacters
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_MinRequiredNonAlphanumericCharactersWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_MinRequiredNonAlphanumericCharactersWithNullRepository_ThrowsInvalidOperationException()
         {
             // Arrange
             var provider = new RepositoryMembershipProvider
@@ -850,13 +959,14 @@ namespace Dibware.Web.Security.Tests.Providers
         #region MinRequiredPasswordLength
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_MinRequiredPasswordLengthWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_MinRequiredPasswordLengthWithNullPasswordService_ThrowsInvalidOperationException()
         {
             // Arrange
             var provider = new RepositoryMembershipProvider
             {
-                MembershipProviderRepository = null
+                MembershipProviderRepository = null,
+                RepositoryMembershipProviderPasswordService = null
             };
 
             // Act
@@ -914,13 +1024,14 @@ namespace Dibware.Web.Security.Tests.Providers
         #region PasswordStrengthRegularExpression
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void Test_PasswordStrengthRegularExpressionWithNullRepository_ThrowsNotImplementedException()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Test_PasswordStrengthRegularExpressionWithNullPasswordService_ThrowsInvalidOperationException()
         {
             // Arrange
             var provider = new RepositoryMembershipProvider
             {
-                MembershipProviderRepository = null
+                MembershipProviderRepository = null,
+                RepositoryMembershipProviderPasswordService = null
             };
 
             // Act
