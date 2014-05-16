@@ -10,6 +10,14 @@ namespace Dibware.Web.Security.Providers.Contracts
     public interface IRepositoryMembershipProviderRepository
     {
         /// <summary>
+        /// Changes the password for the specifed user.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="newHashedPassword">The new hashed password.</param>
+        /// <returns></returns>
+        Boolean ChangePassword(String username, String newHashedPassword);
+
+        /// <summary>
         /// Activates a pending membership account.
         /// </summary>
         /// <param name="accountConfirmationToken">A confirmation token to pass to the authentication provider.</param>

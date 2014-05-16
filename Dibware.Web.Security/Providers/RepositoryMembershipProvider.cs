@@ -42,19 +42,120 @@ namespace Dibware.Web.Security.Providers
         #region ExtendedMembershipProvider
 
         /// <summary>
+        /// The name of the application using the custom membership provider.
+        /// </summary>
+        /// <returns>The name of the application using the custom membership provider.</returns>
+        public override String ApplicationName { get; set; }
+
+        /// <summary>
+        /// Processes a request to update the password for a membership user.
+        /// </summary>
+        /// <param name="username">The user to update the password for.</param>
+        /// <param name="oldPassword">The current password for the specified user.</param>
+        /// <param name="newPassword">The new password for the specified user.</param>
+        /// <returns>
+        /// true if the password was updated successfully; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if MembershipProviderRepository or
+        /// RepositoryMembershipProviderPasswordService is NULL
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// username
+        /// or
+        /// oldPassword
+        /// or
+        /// newPassword
+        /// </exception>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override bool ChangePassword(String username, String oldPassword, String newPassword)
+        {
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            if (RepositoryMembershipProviderPasswordService == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
+            }
+            if (String.IsNullOrEmpty(username))
+            {
+                throw new ArgumentNullException("username");
+            }
+            if (String.IsNullOrEmpty(oldPassword))
+            {
+                throw new ArgumentNullException("oldPassword");
+            }
+            if (String.IsNullOrEmpty(newPassword))
+            {
+                throw new ArgumentNullException("newPassword");
+            }
+
+            // Try and get the hashed password for the supplied username,
+            // and set a flag to indicate it was found...
+            var actualPasswordHash = MembershipProviderRepository.GetHashedPasswordForUser(username);
+            Boolean isValid = !String.IsNullOrEmpty(actualPasswordHash);
+
+            // Are we still valid...
+            if (isValid)
+            {
+                // ... we are, so check the actual hashed password against the
+                // hash for the specified OLD password.
+                isValid = RepositoryMembershipProviderPasswordService
+                    .ValidatePassword(oldPassword, actualPasswordHash);
+            }
+
+            // Are we still valid...
+            if (isValid)
+            {
+                // Update the password hash in the datastore with the new password hash
+                var hashedNewPassword = 
+                    RepositoryMembershipProviderPasswordService.CreateHash(newPassword);
+                isValid = 
+                    MembershipProviderRepository.ChangePassword(username, hashedNewPassword);
+            }
+
+            return isValid;
+        }
+
+        /// <summary>
+        /// Processes a request to update the password question and answer for a membership user.
+        /// </summary>
+        /// <param name="username">The user to change the password question and answer for.</param>
+        /// <param name="password">The password for the specified user.</param>
+        /// <param name="newPasswordQuestion">The new password question for the specified user.</param>
+        /// <param name="newPasswordAnswer">The new password answer for the specified user.</param>
+        /// <returns>
+        /// true if the password question and answer are updated successfully; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public override bool ChangePasswordQuestionAndAnswer(String username, String password, String newPasswordQuestion, String newPasswordAnswer)
+        {
+            throw new NotImplementedException();
+        }
+        
+        /// <summary>
         /// Activates a pending membership account.
         /// </summary>
         /// <param name="accountConfirmationToken">A confirmation token to pass to the authentication provider.</param>
         /// <returns>
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if MembershipProviderRepository is NULL
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">accountConfirmationToken</exception>
         public override bool ConfirmAccount(String accountConfirmationToken)
         {
             // Validate arguments
             if (MembershipProviderRepository == null)
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            if (String.IsNullOrEmpty(accountConfirmationToken))
+            {
+                throw new ArgumentNullException("accountConfirmationToken");
             }
             return MembershipProviderRepository.ConfirmAccount(accountConfirmationToken);
         }
@@ -67,13 +168,28 @@ namespace Dibware.Web.Security.Providers
         /// <returns>
         /// true if the account is confirmed; otherwise, false.
         /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if MembershipProviderRepository is NULL
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// userName
+        /// or
+        /// accountConfirmationToken
+        /// </exception>
         public override bool ConfirmAccount(String userName, String accountConfirmationToken)
         {
             // Validate arguments
             if (MembershipProviderRepository == null)
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            if (String.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentNullException("userName");
+            }
+            if (String.IsNullOrEmpty(accountConfirmationToken))
+            {
+                throw new ArgumentNullException("accountConfirmationToken");
             }
             return MembershipProviderRepository.ConfirmAccount(userName, accountConfirmationToken);
         }
@@ -93,6 +209,11 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        public override MembershipUser CreateUser(String username, String password, String email, String passwordQuestion, String passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// When overridden in a derived class, creates a new user profile and a new membership account.
         /// </summary>
@@ -103,6 +224,9 @@ namespace Dibware.Web.Security.Providers
         /// <returns>
         /// A token that can be sent to the user to confirm the user account.
         /// </returns>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if MembershipProviderRepository is NULL
+        /// </exception>
         /// <exception cref="System.NotImplementedException"></exception>
         public override String CreateUserAndAccount(String userName, String password, Boolean requireConfirmation, IDictionary<String, Object> values)
         {
@@ -283,27 +407,6 @@ namespace Dibware.Web.Security.Providers
         /// </returns>
         /// <exception cref="System.NotImplementedException"></exception>
         public override bool ResetPasswordWithToken(String token, String newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// The name of the application using the custom membership provider.
-        /// </summary>
-        /// <returns>The name of the application using the custom membership provider.</returns>
-        public override String ApplicationName { get; set; }
-
-        public override bool ChangePassword(String username, String oldPassword, String newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ChangePasswordQuestionAndAnswer(String username, String password, String newPasswordQuestion, String newPasswordAnswer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override MembershipUser CreateUser(String username, String password, String email, String passwordQuestion, String passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
         {
             throw new NotImplementedException();
         }
