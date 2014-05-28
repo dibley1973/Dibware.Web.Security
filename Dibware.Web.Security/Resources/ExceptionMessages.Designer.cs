@@ -115,6 +115,15 @@ namespace Dibware.Web.Security.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User does not exist.
+        /// </summary>
+        internal static string UserDoesNotExist {
+            get {
+                return ResourceManager.GetString("UserDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User must not be null.
         /// </summary>
         internal static string UserIsNull {

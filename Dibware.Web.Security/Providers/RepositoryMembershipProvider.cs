@@ -3,6 +3,7 @@ using Dibware.Web.Security.Resources;
 using Ninject;
 using System;
 using System.Collections.Generic;
+using System.Configuration.Provider;
 using System.Web.Configuration;
 using System.Web.Security;
 using WebMatrix.WebData;
@@ -56,21 +57,16 @@ namespace Dibware.Web.Security.Providers
         /// <returns>
         /// true if the password was updated successfully; otherwise, false.
         /// </returns>
-        /// <exception cref="System.InvalidOperationException">
-        /// Thrown if MembershipProviderRepository or
-        /// RepositoryMembershipProviderPasswordService is NULL
-        /// </exception>
-        /// <exception cref="System.ArgumentNullException">
-        /// username
+        /// <exception cref="System.InvalidOperationException">Thrown if MembershipProviderRepository or
+        /// RepositoryMembershipProviderPasswordService is NULL</exception>
+        /// <exception cref="System.ArgumentNullException">username
         /// or
         /// oldPassword
         /// or
-        /// newPassword
-        /// </exception>
-        /// <exception cref="System.NotImplementedException"></exception>
+        /// newPassword</exception>
         public override bool ChangePassword(String username, String oldPassword, String newPassword)
         {
-            // Validate arguments
+            // validate dependencies
             if (MembershipProviderRepository == null)
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
@@ -79,6 +75,7 @@ namespace Dibware.Web.Security.Providers
             {
                 throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
             }
+            // Validate arguments
             if (String.IsNullOrEmpty(username))
             {
                 throw new ArgumentNullException("username");
@@ -110,9 +107,9 @@ namespace Dibware.Web.Security.Providers
             if (isValid)
             {
                 // Update the password hash in the datastore with the new password hash
-                var hashedNewPassword = 
+                var hashedNewPassword =
                     RepositoryMembershipProviderPasswordService.CreateHash(newPassword);
-                isValid = 
+                isValid =
                     MembershipProviderRepository.ChangePassword(username, hashedNewPassword);
             }
 
@@ -134,7 +131,7 @@ namespace Dibware.Web.Security.Providers
         {
             throw new NotImplementedException();
         }
-        
+
         /// <summary>
         /// Activates a pending membership account.
         /// </summary>
@@ -283,7 +280,35 @@ namespace Dibware.Web.Security.Providers
         /// <exception cref="System.NotImplementedException"></exception>
         public override String GeneratePasswordResetToken(String userName, Int32 tokenExpirationInMinutesFromNow)
         {
-            throw new NotImplementedException();
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+
+            if (RepositoryMembershipProviderPasswordService == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
+            }
+
+            // First ensure user exists
+            var user = GetUser(userName, false);
+            if (user == null)
+            {
+                throw new ProviderException(ExceptionMessages.UserDoesNotExist);
+            }
+
+            // Get a new password reset token
+            var passwordConfirmationToken = RepositoryMembershipProviderPasswordService.CreateConfirmationToken();
+
+            // Calculate the token expiry time
+            var tokenExpirationTime = DateTime.Now.AddMinutes(tokenExpirationInMinutesFromNow);
+
+            // Set the token and expiration in the database
+            MembershipProviderRepository.SetPasswordConfirmationToken(passwordConfirmationToken, tokenExpirationTime);
+
+            // Lastly return the token
+            return passwordConfirmationToken;
         }
 
         /// <summary>
@@ -408,7 +433,38 @@ namespace Dibware.Web.Security.Providers
         /// <exception cref="System.NotImplementedException"></exception>
         public override bool ResetPasswordWithToken(String token, String newPassword)
         {
-            throw new NotImplementedException();
+            // validate dependencies
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            if (RepositoryMembershipProviderPasswordService == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
+            }
+
+            // Validate arguments
+            if (String.IsNullOrEmpty(token))
+            {
+                throw new ArgumentNullException("token");
+            }
+            if (String.IsNullOrEmpty(newPassword))
+            {
+                throw new ArgumentNullException("newPassword");
+            }
+
+            // Get the has for the password.
+            var hashedNewPassword =
+                    RepositoryMembershipProviderPasswordService.CreateHash(newPassword);
+
+            // Use the supplied token and try and reset the password to the new hashed value.
+            Boolean result =
+                MembershipProviderRepository.ResetPasswordWithToken(
+                    token,
+                    hashedNewPassword);
+
+            // return the result
+            return result;
         }
 
         public override bool DeleteUser(String username, bool deleteAllRelatedData)
@@ -483,12 +539,18 @@ namespace Dibware.Web.Security.Providers
         }
 
         /// <summary>
-        /// Gets information from the data source for a user. Provides an option to update the last-activity date/time stamp for the user.
+        /// Gets information from the data source for a user. Provides an option
+        /// to update the last-activity date/time stamp for the user.
         /// </summary>
         /// <param name="username">The name of the user to get information for.</param>
-        /// <param name="userIsOnline">true to update the last-activity date/time stamp for the user; false to return user information without updating the last-activity date/time stamp for the user.</param>
+        /// <param name="userIsOnline">
+        /// Set to <c>true</c> if to update the last-activity date/time stamp 
+        /// for the user; set to <c>false</c> to return user information without 
+        /// updating the last-activity date/time stamp for the user.
+        /// </param>
         /// <returns>
-        /// A <see cref="T:System.Web.Security.MembershipUser" /> object populated with the specified user's information from the data source.
+        /// A <see cref="T:System.Web.Security.MembershipUser" /> object 
+        /// populated with the specified user's information from the data source.
         /// </returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.NotImplementedException"></exception>

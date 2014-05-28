@@ -95,14 +95,22 @@ namespace Dibware.Web.Security.Providers.Contracts
         String GetPasswordStrengthRegularExpression();
 
         /// <summary>
-        /// Gets the user for the specified user.
+        /// Gets information from the data source for a user. Provides an option
+        /// to update the last-activity date/time stamp for the user.
         /// </summary>
-        /// <param name="username">The username.</param>
-        /// <param name="userIsOnline">if set to <c>true</c> [user is online].</param>
-        /// <returns></returns>
+        /// <param name="username">The name of the user to get information for.</param>
+        /// <param name="userIsOnline">
+        /// Set to <c>true</c> if to update the last-activity date/time stamp 
+        /// for the user; set to <c>false</c> to return user information without 
+        /// updating the last-activity date/time stamp for the user.
+        /// </param>
+        /// <returns>
+        /// A <see cref="T:System.Web.Security.MembershipUser" /> object 
+        /// populated with the specified user's information from the data source.
+        /// </returns>
         WebMembershipUser GetUser(String providername, String username, Boolean userIsOnline);
 
-        WebMembershipUser GetUser(String providername, object providerUserKey, Boolean userIsOnline);
+        WebMembershipUser GetUser(String providername, Object providerUserKey, Boolean userIsOnline);
 
         /// <summary>
         /// Returns a value that indicates whether the user account has been confirmed by the provider.
@@ -114,17 +122,22 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// <exception cref="System.NotImplementedException"></exception>
         Boolean IsConfirmed(String userName);
 
-        ///// <summary>
-        ///// Verifies that the specified user name and password exist in the data source.
-        ///// </summary>
-        ///// <param name="username">The name of the user to validate.</param>
-        ///// <param name="password">The password for the specified user.</param>
-        ///// <returns>
-        ///// true if the specified username and password are valid; otherwise, false.
-        ///// </returns>
-        ///// <exception cref="System.InvalidOperationException"></exception>
-        ///// <exception cref="System.NotImplementedException"></exception>
-        //Boolean ValidateUser(String username, String password);
+        /// <summary>
+        /// Resets the password with token.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="newPassword">The new password.</param>
+        /// <returns></returns>
+        bool ResetPasswordWithToken(String token, String newPassword);
+
+        /// <summary>
+        /// Sets the password confirmation token.
+        /// </summary>
+        /// <param name="passwordConfirmationToken">The password confirmation token.</param>
+        /// <param name="tokenExpirationTime">The token expiration time.</param>
+        void SetPasswordConfirmationToken(
+            String passwordConfirmationToken, 
+            DateTime tokenExpirationTime);
 
         /// <summary>
         /// Updates the state of the password success.
