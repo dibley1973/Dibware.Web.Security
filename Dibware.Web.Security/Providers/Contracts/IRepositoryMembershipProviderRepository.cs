@@ -133,9 +133,11 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// <summary>
         /// Sets the password confirmation token.
         /// </summary>
+        /// <param name="userName">The user name.</param>
         /// <param name="passwordConfirmationToken">The password confirmation token.</param>
         /// <param name="tokenExpirationTime">The token expiration time.</param>
         void SetPasswordConfirmationToken(
+            String userName,
             String passwordConfirmationToken, 
             DateTime tokenExpirationTime);
 

@@ -305,7 +305,10 @@ namespace Dibware.Web.Security.Providers
             var tokenExpirationTime = DateTime.Now.AddMinutes(tokenExpirationInMinutesFromNow);
 
             // Set the token and expiration in the database
-            MembershipProviderRepository.SetPasswordConfirmationToken(passwordConfirmationToken, tokenExpirationTime);
+            MembershipProviderRepository.SetPasswordConfirmationToken(
+                userName,
+                passwordConfirmationToken, 
+                tokenExpirationTime);
 
             // Lastly return the token
             return passwordConfirmationToken;
