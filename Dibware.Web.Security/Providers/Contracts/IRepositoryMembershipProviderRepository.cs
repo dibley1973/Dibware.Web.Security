@@ -138,8 +138,16 @@ namespace Dibware.Web.Security.Providers.Contracts
         /// <param name="tokenExpirationTime">The token expiration time.</param>
         void SetPasswordConfirmationToken(
             String userName,
-            String passwordConfirmationToken, 
+            String passwordConfirmationToken,
             DateTime tokenExpirationTime);
+
+        /// <summary>
+        /// Updates the confirmation token for the membership specified by email address.
+        /// </summary>
+        /// <param name="emailAddress">The email address.</param>
+        /// <param name="emailConfirmationToken">The email confirmation token.</param>
+        /// <returns></returns>
+        void UpdateConfirmationToken(String emailAddress, String emailConfirmationToken);
 
         /// <summary>
         /// Updates the state of the password success.

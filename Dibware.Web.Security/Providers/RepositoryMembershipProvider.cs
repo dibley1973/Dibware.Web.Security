@@ -206,6 +206,42 @@ namespace Dibware.Web.Security.Providers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Creates a confirmation token for the membership specoifed by email address.
+        /// </summary>
+        /// <param name="emailAddress">The email address.</param>
+        /// <returns>
+        /// true if the account is confirmed; otherwise, false.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException">
+        /// Thrown if MembershipProviderRepository or 
+        /// RepositoryMembershipProviderPasswordService is NULL
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">emailAddress</exception>
+        public String CreateNewConfirmationToken(String emailAddress)
+        {
+            // Validate arguments
+            if (MembershipProviderRepository == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderRepositoryIsNull);
+            }
+            if (RepositoryMembershipProviderPasswordService == null)
+            {
+                throw new InvalidOperationException(ExceptionMessages.MembershipProviderPasswordServiceIsNull);
+            }
+            if (String.IsNullOrEmpty(emailAddress))
+            {
+                throw new ArgumentNullException("emailAddress");
+            }
+
+            // Create a new confirmation token
+            var emailConfirmationToken = RepositoryMembershipProviderPasswordService.CreateConfirmationToken();
+
+            // Update the confirmation token in the system
+            MembershipProviderRepository.UpdateConfirmationToken(emailAddress, emailConfirmationToken);
+            return emailConfirmationToken;
+        }
+
         public override MembershipUser CreateUser(String username, String password, String email, String passwordQuestion, String passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
         {
             throw new NotImplementedException();
@@ -307,7 +343,7 @@ namespace Dibware.Web.Security.Providers
             // Set the token and expiration in the database
             MembershipProviderRepository.SetPasswordConfirmationToken(
                 userName,
-                passwordConfirmationToken, 
+                passwordConfirmationToken,
                 tokenExpirationTime);
 
             // Lastly return the token
